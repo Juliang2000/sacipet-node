@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Facebook Login-Google login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-signin-client_id"
+        content="455409927963-pjq50ke82as4i9mv4163pimvcj5889r6.apps.googleusercontent.com">
+    <!--- google -->
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+</head>
+
+<body style="background-color:#c1b3e9;">
+    <!--
+                ===============autenticacion GOOGLE=======================
+            -->
+    <script type="text/javascript">
+        function onSignIn(googleUser) {
+
+            var profile = googleUser.getBasicProfile();
+            console.log(`-------------------${profile}`)
+            console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+            console.log('Name: ' + profile.getName());
+            console.log('Image URL: ' + profile.getImageUrl());
+            console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+
+            var token = googleUser.getAuthResponse().id_token;
+            console.log(token)
+            //console.log(id_token)
+            // peticion post para enviar el token al back
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/login');
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function () {
+                console.log('Signed in as: ' + xhr.responseText);
+            };
+
+            // importante que se envie el origen de la cuenta y el id del rol basico.
+
+
+            xhr.send(JSON.stringify({
+                token,
+                name,
+                origen_cuenta: 'google',
+                id_rol: 1
+            })); // quemo el rol del usuario 
+
+
+        }
+
+        function signOut() {
+            var auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut().then(function () {
+                console.log('User signed out.');
+            });
+        }
+    </script>
+
+    <!--=================================================================-->
+
+
+
+
+
+    <!--
+                ===============autenticacion facebook=======================
+            -->
+    <script>
+        function statusChangeCallback(response) { // llamando los resultado from FB.getLoginStatus().
+            console.log('statusChangeCallback');
+            console.log(response);
+            //authresponse  propiedad             
+            // The current login status of the person.
+            if (response.status === 'connected') { // Logged into your webpage and Facebook.
+                const {
+                    authResponse: {
+                        userID,
+                        email,
+                        name,
+                        accessToken
+                    }
+                } = response
+
+                console.log(userID)
+                console.log(accessToken)
+                
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', '/login');
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.onload = function () {
+                    console.log('ingresando como::: ' + xhr.responseText);
+                };
+
+                // super importante que se indique el origen de cuenta y el rol basico
+
+                xhr.send(JSON.stringify({
+                    token:accessToken,
+                    userID,
+                    email,
+                    name,
+                    origen_cuenta: 'facebook',
+                    id_rol: 1
+                })); // quemo el rol del usuario 
+
+                testAPI();
+            } else { // Not logged into your webpage or we are unable to tell.
+                document.getElementById('status').innerHTML = 'Please log ' +
+                    'into this webpage.';
+            }
+        }
+
+
+        function checkLoginState() { // Called when a person is finished with the Login Button.
+            FB.getLoginStatus(function (response) { // See the onlogin handler
+                statusChangeCallback(response);
+            });
+        }
+
+
+        window.fbAsyncInit = function () {
+            FB.init({
+                appId: '398513521394376',
+                cookie: true, // Enable cookies to allow the server to access the session.
+                xfbml: true, // Parse social plugins on this webpage.
+                version: 'v9.0' // Use this Graph API version for this call.
+            });
+
+
+            FB.getLoginStatus(function (response) { // Called after the JS SDK has been initialized.
+                statusChangeCallback(response); // Returns the login status.
+            });
+        };
+
+        function testAPI() { // probando desdepuTesting Graph API after login.  See statusChangeCallback() for when this call is made.
+            console.log('Welcome!  Fetching your information.... ');
+            FB.api('/me', {
+                fields: 'name,email'
+            }, function (response) {
+                console.log(response) // mostar datos, pasar al backend
+                console.log('Successful login for: ' + response.name);
+                document.getElementById('status').innerHTML =
+                    'Thanks for logging in, ' + response.name + '!';
+            });
+        }
+    </script>
+    <!--==========================================================-->
+
+
+    <!-- The JS SDK boton de faceboook -->
+
+    <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+    </fb:login-button>
+
+
+
+    <div>
+        <div class="g-signin2" data-onsuccess="onSignIn"></div>
+        <a href="#" onclick="signOut();">salir google</a>
+    </div>
+
+
+    <div>
+        <div id="status"></div>
+    </div>
+
+    <!-------- faceboook-------Load the JS SDK asynchronously -->
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+
+
+
+</body>
+
+
+</html>
