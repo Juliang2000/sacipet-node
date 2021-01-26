@@ -86,7 +86,33 @@ const obtenerFoto = async(id) => {
     }
 }
 
+const fotosPorId = async(id) => {
+
+    try {
+        let respuesta =
+            await pool.query(`SELECT * FROM t_fotos 
+                WHERE id_mascota = $1`, [id]);
+
+        /**Se verifica si la respuesta es vacio
+         */
+        if (JSON.stringify(respuesta.rows) === '[]') {
+            //Se le asigna null a la respuesta
+            respuesta = 0;
+        }
+        /**En caso contrario quiere decir que si arrojó 1 registro
+         * se retorna el array */
+        else {
+            respuesta = respuesta.rows
+        }
+        return respuesta;
+
+    } catch (err) {
+        throw new Error(`Contar fotos fotos.controller.js -> obtenerFoto()\n${err}`);
+    }
+}
+
 module.exports = {
     crear,
-    obtenerFoto
+    obtenerFoto,
+    fotosPorId
 }
