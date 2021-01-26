@@ -5,11 +5,14 @@ require('../src/config/configVet');
 const path = require('path');
 
 ///////////////////////////
-/*
-var cors = require('cors');
 
-app.use(cors());
-require("dotenv").config();*/
+const optionsCors = {
+    origin: 'http://localhost:5000'
+}
+const cors = require('cors');
+
+app.use(cors(optionsCors));
+//require("dotenv").config();
 ///////////////////////////
 
 // middlewares

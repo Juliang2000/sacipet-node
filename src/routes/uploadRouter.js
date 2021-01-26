@@ -12,7 +12,7 @@ router.post("/upload", async(req,res,next) =>{
     //Se captura el parámetro id_mascota de la entrada
     const id_mascota = req.body.id_mascota;
     //Se define la ruta de guardado
-    const rutaGuardado ="/Desarrollo SACI/Proyectos/Ejercicios/Node JS Rest API FileUpload/uploads/"
+    const rutaGuardado = __dirname + "/../uploads/"
     //Se obtiene el archivo a partir de la foto de entrada req
     const file = req.files.photo;
     //Se consulta las fotos que están asociadas a una mascota en particular
