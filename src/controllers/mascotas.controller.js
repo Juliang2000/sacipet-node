@@ -1,4 +1,6 @@
 const pool = require('../database/dbConection');
+const { Router } = require('express');
+const router = Router();
 
 /**Esta función hace un INSERT dentro de la tabla, t_mascotas
  * dados los campos que vienen en el "req" de la petición
@@ -12,6 +14,7 @@ const crear = async(req) => {
     try {
 
         let id_mascota = false;
+        
 
         const {
             nombre_mascota,
@@ -24,7 +27,13 @@ const crear = async(req) => {
             id_color,
             descripcion_mascota,
             id_usuario,
-            tipo_tramite
+            tipo_tramite,
+            //vacunas
+            id,
+            id_vacuna_Rabia,
+            id_vacuna_Rinotraqueítis,
+            id_vacuna_Parvovirus,
+            id_vacuna_Moquillo
         } = req.body;
 
         /**En caso de que los campos "id_tamanio" o "descripcion_mascota"
@@ -65,6 +74,44 @@ const crear = async(req) => {
              * de insertar
              */
             id_mascota = respuesta.rows[0].id_mascota;
+
+
+  
+
+            //////////////////////////////////////////////////////
+            let body = req.body
+            if ( body.id_vacuna_Rabia === undefined){
+             console.log('no tiene vacuna contra la rabia')
+            }else{
+                const respuesta1 = await( pool.query(`INSERT INTO public.t_mascotas_vacunas(id, id_vacuna, id_mascota)VALUES ($1, $2, $3);`, [id,id_vacuna_Rabia,id_mascota]))
+            }
+
+
+
+            if ( body.id_vacuna_Rinotraqueítis === undefined){
+                console.log('no tiene vacuna contra la Rinotraqueítis')
+            }else{
+                const respuesta2 = await( pool.query(`INSERT INTO public.t_mascotas_vacunas(id, id_vacuna, id_mascota)VALUES ($1, $2, $3);`, [15,id_vacuna_Rinotraqueítis,id_mascota]))
+            }
+
+
+
+            if ( body.id_vacuna_Parvovirus === undefined){
+                console.log('no tiene vacuna contra la Parvovirus')
+            }else{
+                const respuesta3 = await( pool.query(`INSERT INTO public.t_mascotas_vacunas(id, id_vacuna, id_mascota)VALUES ($1, $2, $3);`, [16,id_vacuna_Parvovirus,id_mascota]))
+            }
+
+
+            if ( body.id_vacuna_Moquillo === undefined){
+                console.log('no tiene vacuna contra Moquillo')
+            }else{
+                const respuesta2 = await( pool.query(`INSERT INTO public.t_mascotas_vacunas(id, id_vacuna, id_mascota)VALUES ($1, $2, $3);`, [17, id_vacuna_Moquillo,id_mascota]))
+               
+            }
+
+
+   
         }
         /**En caso contrario quiere decir que rowCount NO vale 1,
          * y el INSERT no se ejecutó
@@ -82,6 +129,10 @@ const crear = async(req) => {
 
     }
 }
+
+
+
+
 
 /**Obtiene todos los campos de un registro en la tabla
  * adopcion, dado el id_mascota
@@ -666,5 +717,6 @@ module.exports = {
     obtenerPorTipoMascotaYTamanio,
     obtenerPorTamanioYColor,
     obtenerPorTipoMascotaYColor,
-    obtenerPorTipoMascotaTamanioYColor
+    obtenerPorTipoMascotaTamanioYColor,
+   // createvacunacion
 }

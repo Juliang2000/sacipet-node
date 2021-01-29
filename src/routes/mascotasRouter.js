@@ -5,9 +5,13 @@ const adops = require('../controllers/mascotas.controller');
 const razas = require('../controllers/razas.controller');
 const colores = require('../controllers/colores.controller');
 
+
+//const {createvacunacion} = require('../controllers/mascotas.controller');
+//router.post('/usersc/id_mascota', createvacunacion)
 //===========================================
 //Guarda registro en la tabla mascotas
 //===========================================
+
 router.post("/mascotas", async(req, res) => {
 
     try {
@@ -31,7 +35,8 @@ router.post("/mascotas", async(req, res) => {
             id_color,
             descripcion_mascota,
             id_usuario,
-            tipo_tramite
+            tipo_tramite,
+    
         } = req.body;
 
         /**Se guardan dentro de un array,
