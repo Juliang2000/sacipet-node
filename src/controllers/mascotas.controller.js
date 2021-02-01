@@ -29,11 +29,12 @@ const crear = async(req) => {
             id_usuario,
             tipo_tramite,
             //vacunas
-            id,
-            id_vacuna_Rabia,
+            id_vacuna_Rabia ,
             id_vacuna_Rinotraqueítis,
             id_vacuna_Parvovirus,
-            id_vacuna_Moquillo
+            id_vacuna_Moquillo,
+            //ubicacion geograficas
+            id_codigo
         } = req.body;
 
         /**En caso de que los campos "id_tamanio" o "descripcion_mascota"
@@ -51,8 +52,9 @@ const crear = async(req) => {
                 id_color,
                 descripcion_mascota,
                 id_usuario,
-                tipo_tramite) 
-                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) 
+                tipo_tramite,
+                id_codigo) 
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11,$12) 
                 RETURNING id_mascota`, [
                 nombre_mascota,
                 edad_mascota,
@@ -64,7 +66,8 @@ const crear = async(req) => {
                 id_color,
                 descripcion_mascota || null,
                 id_usuario,
-                tipo_tramite
+                tipo_tramite,
+                id_codigo
             ]);
 
         /**Si rowCount es igual a 1 quiere decir que el INSERT
@@ -80,33 +83,35 @@ const crear = async(req) => {
 
             //////////////////////////////////////////////////////
             let body = req.body
-            if ( body.id_vacuna_Rabia === undefined){
-             console.log('no tiene vacuna contra la rabia')
+            if ( body.id_vacuna_Rabia === 'true'){
+                const respuesta1 = await( pool.query(`INSERT INTO public.t_mascotas_vacunas( id_vacuna, id_mascota)VALUES ($1, $2);`, [1,id_mascota]));
             }else{
-                const respuesta1 = await( pool.query(`INSERT INTO public.t_mascotas_vacunas(id, id_vacuna, id_mascota)VALUES ($1, $2, $3);`, [id,id_vacuna_Rabia,id_mascota]))
+                console.log('no tiene vacuna contra la rabia')
             }
 
 
 
-            if ( body.id_vacuna_Rinotraqueítis === undefined){
-                console.log('no tiene vacuna contra la Rinotraqueítis')
+            if ( body.id_vacuna_Rinotraqueítis === 'true'){
+                const respuesta2 = await( pool.query(`INSERT INTO public.t_mascotas_vacunas(id_vacuna, id_mascota)VALUES ($1, $2);`, [2,id_mascota]));
             }else{
-                const respuesta2 = await( pool.query(`INSERT INTO public.t_mascotas_vacunas(id, id_vacuna, id_mascota)VALUES ($1, $2, $3);`, [15,id_vacuna_Rinotraqueítis,id_mascota]))
+               console.log('no tiene vacuna contra la Rinotraqueítis')
             }
 
 
 
-            if ( body.id_vacuna_Parvovirus === undefined){
+            if ( body.id_vacuna_Parvovirus === 'true'){
+                const respuesta3 = await( pool.query(`INSERT INTO public.t_mascotas_vacunas( id_vacuna, id_mascota)VALUES ($1, $2);`, [3,id_mascota]));
+                
+            }else{
                 console.log('no tiene vacuna contra la Parvovirus')
-            }else{
-                const respuesta3 = await( pool.query(`INSERT INTO public.t_mascotas_vacunas(id, id_vacuna, id_mascota)VALUES ($1, $2, $3);`, [16,id_vacuna_Parvovirus,id_mascota]))
             }
 
 
-            if ( body.id_vacuna_Moquillo === undefined){
-                console.log('no tiene vacuna contra Moquillo')
+            if ( body.id_vacuna_Moquillo === 'true'){
+                const respuesta2 = await( pool.query(`INSERT INTO public.t_mascotas_vacunas( id_vacuna, id_mascota)VALUES ($1, $2);`, [ 4,id_mascota]))
+                
             }else{
-                const respuesta2 = await( pool.query(`INSERT INTO public.t_mascotas_vacunas(id, id_vacuna, id_mascota)VALUES ($1, $2, $3);`, [17, id_vacuna_Moquillo,id_mascota]))
+                console.log('no tiene vacuna contra Moquillo')
                
             }
 

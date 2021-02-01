@@ -98,8 +98,42 @@ const obtenerMascotaTipoPerro = async(id_raza) => {
     }
 }
 
+
+const obtenerMascotaTipoGato = async(id_raza) => {
+    try {
+        let respuesta =
+            await pool.query(`SELECT t_tipos_mascotas.nombre_tipo, t_razas.nombre_raza
+            FROM t_razas INNER JOIN t_tipos_mascotas ON
+            t_razas.id_tipo_mascota = t_tipos_mascotas.id_tipo_mascota
+            WHERE t_tipos_mascotas.nombre_tipo = 'Gato' 
+            AND t_razas.id_raza = $1`, [id_raza]);
+
+        /**Para verificar que el resultado de la consulta no arroja ningún registro
+         * se convierte la respuesta en un JSONArray y se compara con []
+         */
+        if (JSON.stringify(respuesta.rows) === '[]') {
+
+            //Se le asigna null a la respuesta
+            respuesta = null;
+
+        }
+        /**En caso contrario quiere decir que si arrojó 1 o varios registro
+         * por lo tanto se le asigna a la respuesta los valores de los atributos
+         * de todos los registros encontrados*/
+        else {
+            respuesta = respuesta.rows[0];
+        }
+
+        return respuesta;
+
+    } catch (err) {
+        throw new Error(`Archivo razas.controller.js -> obtenerMascotaTipoGato()\n${err}`);
+    }
+}
+
 module.exports = {
     obtenerPorIdTipoMascota,
     obtenerPorIdRaza,
-    obtenerMascotaTipoPerro
+    obtenerMascotaTipoPerro,
+    obtenerMascotaTipoGato
 }

@@ -36,6 +36,7 @@ router.post("/mascotas", async(req, res) => {
             descripcion_mascota,
             id_usuario,
             tipo_tramite,
+            id_codigo
     
         } = req.body;
 
@@ -82,6 +83,10 @@ router.post("/mascotas", async(req, res) => {
             {
                 nombre: 'tipo_tramite',
                 campo: tipo_tramite
+            },
+            {
+                nombre: 'id_codigo',
+                campo: id_codigo
             }
         ];
 
@@ -137,7 +142,21 @@ router.post("/mascotas", async(req, res) => {
             if (!id_tamanio) {
                 return res.status(400).json({
                     ok: false,
-                    msg: `No ha ingresado el campo id_tamanio`
+                    msg: `No ha ingresado el campo id_tamanio para perro`
+                });
+            }
+        }
+
+
+        const esRazaTipoGato = await razas.obtenerMascotaTipoGato(id_raza);
+
+        if (esRazaTipoGato !== null) {
+
+            //Si el campo "id_tamanio" NO se envió
+            if (!id_tamanio) {
+                return res.status(400).json({
+                    ok: false,
+                    msg: `No ha ingresado el campo id_tamanio para gato`
                 });
             }
         }
