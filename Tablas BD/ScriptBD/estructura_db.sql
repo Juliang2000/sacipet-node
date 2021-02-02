@@ -548,25 +548,52 @@ INSERT INTO public.t_colores(nombre_color)
 VALUES ('Blanco');
 
 --Tabla t_mascotas
+-- Table: public.t_mascotas
+
+-- DROP TABLE public.t_mascotas;
+
 CREATE TABLE public.t_mascotas
 (
-    id_mascota integer NOT NULL,
-    nombre_mascota character varying,
+    id_mascota integer NOT NULL DEFAULT nextval('t_mascotas_id_mascota_seq'::regclass),
+    nombre_mascota character varying COLLATE pg_catalog."default",
     edad_mascota integer NOT NULL,
-    escala_edad integer NOT NULL,--1 Meses,2 Semanas, 3 Años
-    esterilizado integer NULL, --0 No, 1 Si
-    genero_mascota character varying,
-	id_raza int4 NOT NULL,
-	id_tamanio int4,
-    id_color int4 NOT NULL,
-    descripcion_mascota character varying NULL,
-    id_usuario int4 NOT NULL,
-    tipo_tramite integer NOT NULL,--1 En Adopción,2 Perdidos, 3 Recuperados
-    CONSTRAINT t_mascotas_pkey PRIMARY KEY (id_mascota)
-);
+    escala_edad integer NOT NULL,
+    esterilizado integer,
+    genero_mascota character varying COLLATE pg_catalog."default",
+    id_raza integer NOT NULL,
+    id_tamanio integer,
+    id_color integer NOT NULL,
+    descripcion_mascota character varying COLLATE pg_catalog."default",
+    id_usuario integer NOT NULL,
+    tipo_tramite integer NOT NULL,
+    id_codigo integer,
+    CONSTRAINT t_mascotas_pkey PRIMARY KEY (id_mascota),
+    CONSTRAINT t_mascotas_id_codigo_fk FOREIGN KEY (id_codigo)
+        REFERENCES public.t_ubicaciones_geograficas (id_codigo) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT t_mascotas_id_color_fk FOREIGN KEY (id_color)
+        REFERENCES public.t_colores (id_color) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT t_mascotas_id_raza_fk FOREIGN KEY (id_raza)
+        REFERENCES public.t_razas (id_raza) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT t_mascotas_id_tamanio_fk FOREIGN KEY (id_tamanio)
+        REFERENCES public.t_tamanios (id_tamanio) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT t_mascotas_id_usuario_fk FOREIGN KEY (id_usuario)
+        REFERENCES public.t_usuario (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
 
-CREATE SEQUENCE t_mascotas_id_mascota_seq;
-ALTER TABLE t_mascotas ALTER COLUMN id_mascota SET DEFAULT nextval('t_mascotas_id_mascota_seq'::regclass);
+TABLESPACE pg_default;
+
+ALTER TABLE public.t_mascotas
+    OWNER to veterinarias;
 
 --Se le coloca la restricción de la llave foránea del campo id_raza, que viene 
 --de la tabla t_razas a la tabla t_mascotas
@@ -1791,3 +1818,58 @@ INSERT INTO public.t_ubicaciones_geograficas (id_codigo, descripcion, id_unde, v
 INSERT INTO public.t_ubicaciones_geograficas (id_codigo, descripcion, id_unde, vigente, codigo_dane, tipo) VALUES (1154, 'LA PRIMAVERA', 1145, true, 99524, 'MN');
 INSERT INTO public.t_ubicaciones_geograficas (id_codigo, descripcion, id_unde, vigente, codigo_dane, tipo) VALUES (1155, 'SANTA ROSALÍA', 1145, true, 99624, 'MN');
 INSERT INTO public.t_ubicaciones_geograficas (id_codigo, descripcion, id_unde, vigente, codigo_dane, tipo) VALUES (1156, 'CUMARIBO', 1145, true, 99773, 'MN');
+
+
+
+--tabla para formulario de adopcion
+
+	
+create table t_formulario(
+	id_formulario serial,
+	nombre_adoptante character varying(100),
+    direccion_adoptante character varying(150),
+	id_codigo integer,
+    localidad character varying(30),
+    telefono integer,
+    email character varying(50),
+    ocupacion character varying(40),
+    estado_civil character varying(10),
+	pregunta_mascota_1 character varying(30),
+    pregunta_mascota_2 character varying(30),
+    pregunta_mascota_3 character varying(30),
+    pregunta_mascota_4 BOOLEAN,
+	pregunta_familia_1 integer,
+    pregunta_familia_2 BOOLEAN,
+    pregunta_familia_3 BOOLEAN,
+    pregunta_familia_4 BOOLEAN,
+    pregunta_familia_5 BOOLEAN,
+    pregunta_familia_6 character varying(30),
+    pregunta_familia_7 character varying(30),
+    pregunta_adpcion_1 character varying(30),
+    pregunta_adpcion_2 integer,
+    pregunta_adpcion_3 character varying(50),
+    pregunta_adpcion_4 BOOLEAN,
+    pregunta_adpcion_5 character varying(30),
+    pregunta_adpcion_6 integer,
+    pregunta_adpcion_7 character varying(30),
+    pregunta_adpcion_8 character varying(30),
+    pregunta_adpcion_9 character varying(30),
+    pregunta_adpcion_10 BOOLEAN,
+    pregunta_adpcion_11 BOOLEAN,
+    pregunta_adpcion_12 BOOLEAN,
+    pregunta_adpcion_13 BOOLEAN,
+    pregunta_adpcion_14 BOOLEAN,
+    pregunta_adpcion_15 BOOLEAN,
+    pregunta_adpcion_16 BOOLEAN,
+    pregunta_adpcion_17 character varying(60),
+    pregunta_adpcion_18 BOOLEAN,
+	terminos BOOLEAN,
+	primary key (id_formulario),
+	 CONSTRAINT t_formulario_id_codigo_fk FOREIGN KEY (id_codigo)
+        REFERENCES public.t_ubicaciones_geograficas (id_codigo) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+	
+	
+	  
+ );

@@ -23,6 +23,6 @@ app.use(require('./departamentosRouter').router);
 app.use(require('./municipiosRouter').router);
 app.use(require('./uploadRouter').router);
 app.use(require('./downloadRouter').router);
-
+app.use(require('./formularioRouter').router);
 //Se exporta app que tiene configurados los métodos HTTP
 module.exports = app;
