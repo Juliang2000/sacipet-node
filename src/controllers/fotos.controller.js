@@ -7,7 +7,7 @@ const pool = require('../database/dbConection');
  * en caso de que se haya hecho el INSERT, o retorna
  * 0 en caso de que no se haya insertado
  */
-const crear = async(ruta_guardado,nombre_imagen,id_mascota) => {
+const crear = async(ruta_guardado,nombre_imagen,id_mascota,consecutivo) => {
 
     try {
 
@@ -17,10 +17,11 @@ const crear = async(ruta_guardado,nombre_imagen,id_mascota) => {
             await pool.query(`INSERT INTO t_fotos
                 (ruta_guardado,
                 nombre_imagen, 
-                id_mascota) 
-                VALUES ($1, $2, $3)
+                id_mascota,
+                consecutivo) 
+                VALUES ($1, $2, $3, $4)
                 RETURNING id`, [ruta_guardado,nombre_imagen,
-                id_mascota
+                id_mascota,consecutivo
             ]);
 
         /**Si rowCount es igual a 1 quiere decir que el INSERT
@@ -111,8 +112,40 @@ const fotosPorId = async(id) => {
     }
 }
 
+const obtenerNombreFoto = async(id,consecutivo) => {
+
+    try {
+
+        let respuesta =
+            await pool.query(`SELECT nombre_imagen FROM t_fotos 
+                WHERE id_mascota = $1 AND consecutivo=$2`, [id,consecutivo]);
+
+        /**Para verificar que el resultado de la consulta no arroja ningún registro
+         * se convierte la respuesta en un JSONArray y se compara con []
+         */
+        if (JSON.stringify(respuesta.rows) === '[]') {
+
+            //Se le asigna null a la respuesta
+            respuesta = null;
+
+        }
+        /**En caso contrario quiere decir que si arrojó 1 registro
+         * por lo tanto se le asigna al response el valor del atributo ruta_guardado
+         * que está en la primera posición del array */
+        else {            
+            respuesta = respuesta.rows[0].nombre_imagen;
+        }
+
+        return respuesta;
+
+    } catch (err) {
+        throw new Error(`Archivo fotos.controller.js -> obtenerNombreFoto()\n${err}`);
+    }
+}
+
 module.exports = {
     crear,
     obtenerFoto,
-    fotosPorId
+    fotosPorId,
+    obtenerNombreFoto
 }
