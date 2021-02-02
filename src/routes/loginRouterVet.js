@@ -168,7 +168,7 @@ router.post("/login", async(req, res) => {
 
             ok: true,
             msg: `¡Autenticación exitosa!`,
-            user: dbUser,
+            // user: dbUser,
             tokenGenerado
         });
 
