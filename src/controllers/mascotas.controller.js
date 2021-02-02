@@ -711,6 +711,34 @@ const obtenerPorTipoMascotaTamanioYColor = async(nombre_tipo, tamanio, nombre_co
     }
 }
 
+const obtenerMascotaPorId = async (id) => {
+
+    try {
+        let respuesta = await pool.query('SELECT * FROM t_mascotas WHERE id_mascota = $1', [id]);
+
+        /**Para verificar que el resultado de la consulta no arroja ningún registro
+         * se convierte la respuesta en un JSONArray y se compara con []
+         */
+        if (JSON.stringify(respuesta.rows) === '[]') {
+
+            //Se le asigna null a la respuesta
+            respuesta = null;
+
+        }
+        /**En caso contrario quiere decir que si arrojó 1 registro
+         * por lo tanto se le asigna a la respuesta los valores de los atributos
+         * del registro encontrado que está en la primera posición del array */
+        else {
+            respuesta = respuesta.rows[0];
+        }
+
+        return respuesta;
+
+    } catch (err) {
+        throw new Error(`Archivo mascotas.controller.js->obtenerMascotaPorId()\n${err}`);
+    }
+}
+
 module.exports = {
     crear,
     obtenerPorId,
@@ -723,5 +751,5 @@ module.exports = {
     obtenerPorTamanioYColor,
     obtenerPorTipoMascotaYColor,
     obtenerPorTipoMascotaTamanioYColor,
-   // createvacunacion
+    obtenerMascotaPorId
 }
