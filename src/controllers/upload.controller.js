@@ -23,10 +23,10 @@ exports.uploadFile = async(req,res)=>{
     const Fotos = await fots.fotosPorId(id_mascota);
     //Se adjuntan fotos solo si en la base de datos hay menos de 5 archivos relacionados
     if(Fotos.length<5 || Fotos===0){
-        //Crear drectorio uploads
-        // fs.mkdir(rutaGuardado,(error)=>{
-        //     //if(error)throw error;
-        // });
+        // Crear drectorio uploads
+        fs.mkdir(rutaGuardado,(error)=>{
+            //if(error)throw error;
+        });
         //Adjuntar archivo en el directorio
         file.mv(rutaGuardado+file.name, function(err, result){    //C:/uploads/
             if(err) throw err;
@@ -48,7 +48,7 @@ exports.uploadFile = async(req,res)=>{
         };    
         
         //Se crea el registro en base de datos con la información de la foto correspondiente
-        const id = await fots.crear(rutaGuardado,id_mascota+consecutivo+'_'+req.files.photo.name,id_mascota);        
+        const id = await fots.crear(rutaGuardado,req.files.photo.name,id_mascota,consecutivo);        
     }else{
         //Se informativo al usuario si ya se han subido las 5 fotos pertinentes
         return res.status(400).json({

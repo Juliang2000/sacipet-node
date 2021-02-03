@@ -623,6 +623,8 @@ CREATE TABLE public.t_fotos
     CONSTRAINT t_fotos_pkey PRIMARY KEY (id)
 );
 
+ALTER TABLE public.t_fotos ADD COLUMN consecutivo integer NOT NULL;
+
 CREATE SEQUENCE t_fotos_id_seq;
 ALTER TABLE t_fotos ALTER COLUMN id SET DEFAULT nextval('t_fotos_id_seq'::regclass);
 
