@@ -218,6 +218,48 @@ const LlenarFormulario = async(req) => {
 
 
 
+
+const SolicitudAdopcion = async (id) => {
+
+    try {
+        const {
+            id_mascota, 
+            id_formulario
+        } = req.body;
+
+        const respuesta =
+            await pool.query(`INSERT INTO t_mascotas_formulario
+                (id_mascota, 
+                id_formulario) 
+                VALUES ($1, $2) `, [
+                id_mascota, 
+                id_formulario
+            ]);
+
+
+        /**Para verificar que el resultado de la consulta no arroja ningún registro
+         * se convierte la respuesta en un JSONArray y se compara con []
+         */
+        if (JSON.stringify(respuesta.rows) === '[]') {
+
+            //Se le asigna null a la respuesta
+            respuesta = null;
+
+        }
+        /**En caso contrario quiere decir que si arrojó 1 registro
+         * por lo tanto se le asigna a la respuesta los valores de los atributos
+         * del registro encontrado que está en la primera posición del array */
+        else {
+            respuesta = respuesta.rows[0];
+        }
+
+        return respuesta;
+
+    } catch (err) {
+        throw new Error(`Archivo mascotas.controller.js->SolicitudAdopcion()\n${err}`);
+    }
+}
+
 module.exports = {
     LlenarFormulario
    
