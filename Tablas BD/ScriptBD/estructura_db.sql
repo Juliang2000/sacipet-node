@@ -1886,6 +1886,7 @@ ALTER TABLE t_formulario
    REFERENCES t_usuario(id);
 
 
+
 --tabla para vincular los formularios de adopcion a la mascota
 create table t_mascotas_formulario(
   id serial,
@@ -1902,3 +1903,7 @@ create table t_mascotas_formulario(
         ON DELETE NO ACTION
 
  );
+
+
+alter table t_mascotas_formulario
+  add solicitud_adopcion BOOLEAN;

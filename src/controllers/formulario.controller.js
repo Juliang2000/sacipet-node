@@ -219,7 +219,7 @@ const LlenarFormulario = async(req) => {
 
 
 
-const SolicitudAdopcion = async (id) => {
+const SolicitudAdopcion = async (req) => {
 
     try {
         const {
@@ -227,7 +227,7 @@ const SolicitudAdopcion = async (id) => {
             id_formulario
         } = req.body;
 
-        const respuesta =
+        let respuesta =
             await pool.query(`INSERT INTO t_mascotas_formulario
                 (id_mascota, 
                 id_formulario) 
@@ -260,7 +260,79 @@ const SolicitudAdopcion = async (id) => {
     }
 }
 
+
+
+
+
+
+const obtenerformularios = async(req) => {
+
+    try {
+
+        const {
+            solicitud_adopcion, 
+            id_mascota,
+            id_formulario
+        } = req.body;
+
+        let respuesta =
+            await pool.query(`		
+            UPDATE t_mascotas_formulario SET solicitud_adopcion = $1 WHERE id_mascota = $2 AND id_formulario = $3;`, [solicitud_adopcion, id_mascota,id_formulario]);
+           
+
+        /**Para verificar que el resultado de la consulta no arroja ningún registro
+         * se convierte la respuesta en un JSONArray y se compara con []
+         */
+        if (JSON.stringify(respuesta.rows) === '[]') {
+
+            //Se le asigna null a la respuesta
+            respuesta = null;
+
+        }
+        /**En caso contrario quiere decir que si arrojó 1 registro
+         * por lo tanto se le asigna a la respuesta los valores de los atributos
+         * del registro encontrado que está en la primera posición del array */
+        else {
+            respuesta = respuesta.rows[0];
+
+            
+        }
+
+        return respuesta;
+
+    } catch (err) {
+        throw new Error(`Archivo mascotas.controller.js->obtenerPorId()\n${err}`);
+    }
+}
+
+
+const mostarformularios = async(id_formulario) => {
+
+    respueta1 =await( pool.query(`SELECT * from t_mascotas_formulario where id_formulario = $1;`, [ id_formulario]));
+
+
+   if (JSON.stringify(respuesta.rows) === '[]') {
+
+       //Se le asigna null a la respuesta
+       respuesta1 = null;
+
+   }
+   /**En caso contrario quiere decir que si arrojó 1 registro
+    * por lo tanto se le asigna a la respuesta los valores de los atributos
+    * del registro encontrado que está en la primera posición del array */
+   else {
+       respuesta1 = respuesta.rows[0];
+
+       
+   }
+
+   return respuesta1;
+}
+
 module.exports = {
-    LlenarFormulario
+    LlenarFormulario,
+    SolicitudAdopcion,
+    obtenerformularios,
+    mostarformularios
    
 }
