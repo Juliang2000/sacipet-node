@@ -1873,3 +1873,13 @@ create table t_formulario(
 	
 	  
  );
+
+
+alter table t_formulario
+  add id integer;
+
+ALTER TABLE t_formulario
+   ADD CONSTRAINT fk_t_formulario_t_usuario
+   FOREIGN KEY (id) 
+   REFERENCES t_usuario(id);
+   

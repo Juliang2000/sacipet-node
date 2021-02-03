@@ -52,7 +52,8 @@ router.post("/formulario", async(req, res) => {
             pregunta_adpcion_16,
             pregunta_adpcion_17,
             pregunta_adpcion_18,
-            terminos
+            terminos,
+            id
     
         } = req.body;
 
@@ -211,6 +212,10 @@ router.post("/formulario", async(req, res) => {
             {
                 nombre: 'terminos',
                 campo: terminos
+            },
+            {
+                nombre: 'id',
+                campo: id
             },
         ];
 
