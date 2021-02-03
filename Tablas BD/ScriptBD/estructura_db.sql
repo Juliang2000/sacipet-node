@@ -1880,3 +1880,30 @@ create table t_formulario(
 	
 	  
  );
+
+--agrgegar campo para vincular el ususurio con su formulario
+alter table t_formulario
+  add id integer;
+
+ALTER TABLE t_formulario
+   ADD CONSTRAINT fk_t_formulario_t_usuario
+   FOREIGN KEY (id) 
+   REFERENCES t_usuario(id);
+
+
+--tabla para vincular los formularios de adopcion a la mascota
+create table t_mascotas_formulario(
+  id serial,
+  id_mascota integer,
+  id_formulario integer,
+  primary key (id),
+ CONSTRAINT t_mascotas_formulario_id_mascota_fk FOREIGN KEY (id_mascota)
+        REFERENCES public.t_mascotas (id_mascota) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+	 CONSTRAINT t_mascotas_formulario_id_formulario_fk FOREIGN KEY (id_formulario)
+        REFERENCES public.t_formulario (id_formulario) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+
+ );

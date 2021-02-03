@@ -97,7 +97,8 @@ const LlenarFormulario = async(req) => {
 
             //acepta terminos y condiciones del contartao
             terminos,
-            
+            //id usuario
+            id
 
           
         } = req.body;
@@ -144,8 +145,9 @@ const LlenarFormulario = async(req) => {
                 pregunta_adpcion_16, 
                 pregunta_adpcion_17, 
                 pregunta_adpcion_18, 
-                terminos) 
-                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13 ,$14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, $33, $34, $35, $36, $37, $38) 
+                terminos,
+                id) 
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13 ,$14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, $33, $34, $35, $36, $37, $38, $39) 
                 RETURNING id_formulario`, [nombre_adoptante,
             direccion_adoptante,
             id_codigo,
@@ -183,7 +185,8 @@ const LlenarFormulario = async(req) => {
             pregunta_adpcion_16,
             pregunta_adpcion_17,
             pregunta_adpcion_18,
-            terminos
+            terminos,
+            id
             ]);
 
         /**Si rowCount es igual a 1 quiere decir que el INSERT
@@ -214,6 +217,48 @@ const LlenarFormulario = async(req) => {
 }
 
 
+
+
+const SolicitudAdopcion = async (id) => {
+
+    try {
+        const {
+            id_mascota, 
+            id_formulario
+        } = req.body;
+
+        const respuesta =
+            await pool.query(`INSERT INTO t_mascotas_formulario
+                (id_mascota, 
+                id_formulario) 
+                VALUES ($1, $2) `, [
+                id_mascota, 
+                id_formulario
+            ]);
+
+
+        /**Para verificar que el resultado de la consulta no arroja ningún registro
+         * se convierte la respuesta en un JSONArray y se compara con []
+         */
+        if (JSON.stringify(respuesta.rows) === '[]') {
+
+            //Se le asigna null a la respuesta
+            respuesta = null;
+
+        }
+        /**En caso contrario quiere decir que si arrojó 1 registro
+         * por lo tanto se le asigna a la respuesta los valores de los atributos
+         * del registro encontrado que está en la primera posición del array */
+        else {
+            respuesta = respuesta.rows[0];
+        }
+
+        return respuesta;
+
+    } catch (err) {
+        throw new Error(`Archivo mascotas.controller.js->SolicitudAdopcion()\n${err}`);
+    }
+}
 
 module.exports = {
     LlenarFormulario
