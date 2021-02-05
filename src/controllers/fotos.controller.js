@@ -112,12 +112,12 @@ const fotosPorId = async(id) => {
     }
 }
 
-const obtenerNombreFoto = async(id,consecutivo) => {
+const obtenerIdFoto = async(id,consecutivo) => {
 
     try {
 
         let respuesta =
-            await pool.query(`SELECT nombre_imagen FROM t_fotos 
+            await pool.query(`SELECT id FROM t_fotos 
                 WHERE id_mascota = $1 AND consecutivo=$2`, [id,consecutivo]);
 
         /**Para verificar que el resultado de la consulta no arroja ningún registro
@@ -133,7 +133,7 @@ const obtenerNombreFoto = async(id,consecutivo) => {
          * por lo tanto se le asigna al response el valor del atributo ruta_guardado
          * que está en la primera posición del array */
         else {            
-            respuesta = respuesta.rows[0].nombre_imagen;
+            respuesta = respuesta.rows[0].id;
         }
 
         return respuesta;
@@ -147,5 +147,5 @@ module.exports = {
     crear,
     obtenerFoto,
     fotosPorId,
-    obtenerNombreFoto
+    obtenerIdFoto
 }
