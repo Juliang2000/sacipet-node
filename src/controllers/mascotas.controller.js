@@ -83,32 +83,36 @@ const crear = async(req) => {
 
             //////////////////////////////////////////////////////
             let body = req.body
-            if ( body.id_vacuna_Rabia === 'true'){
+            if ( body.id_vacuna_Rabia === true){
                 const respuesta1 = await( pool.query(`INSERT INTO public.t_mascotas_vacunas( id_vacuna, id_mascota)VALUES ($1, $2);`, [1,id_mascota]));
+                console.log('tiene vacuna contra la rabia')
             }else{
                 console.log('no tiene vacuna contra la rabia')
             }
 
 
 
-            if ( body.id_vacuna_Rinotraqueítis === 'true'){
+            if ( body.id_vacuna_Rinotraqueítis === true){
                 const respuesta2 = await( pool.query(`INSERT INTO public.t_mascotas_vacunas(id_vacuna, id_mascota)VALUES ($1, $2);`, [2,id_mascota]));
+                console.log('tiene vacuna contra la Rinotraqueítis')
             }else{
                console.log('no tiene vacuna contra la Rinotraqueítis')
             }
 
 
 
-            if ( body.id_vacuna_Parvovirus === 'true'){
+            if ( body.id_vacuna_Parvovirus === true){
                 const respuesta3 = await( pool.query(`INSERT INTO public.t_mascotas_vacunas( id_vacuna, id_mascota)VALUES ($1, $2);`, [3,id_mascota]));
+                console.log(' tiene vacuna contra la Parvovirus')
                 
             }else{
                 console.log('no tiene vacuna contra la Parvovirus')
             }
 
 
-            if ( body.id_vacuna_Moquillo === 'true'){
-                const respuesta2 = await( pool.query(`INSERT INTO public.t_mascotas_vacunas( id_vacuna, id_mascota)VALUES ($1, $2);`, [ 4,id_mascota]))
+            if ( body.id_vacuna_Moquillo === true){
+                const respuesta2 = await( pool.query(`INSERT INTO public.t_mascotas_vacunas( id_vacuna, id_mascota)VALUES ($1, $2);`, [ 4,id_mascota]));
+                console.log('tiene vacuna contra Moquillo')
                 
             }else{
                 console.log('no tiene vacuna contra Moquillo')

@@ -306,33 +306,19 @@ const obtenerformularios = async(req) => {
 }
 
 
-const mostarformularios = async(id_formulario) => {
-
-    respueta1 =await( pool.query(`SELECT * from t_mascotas_formulario where id_formulario = $1;`, [ id_formulario]));
 
 
-   if (JSON.stringify(respuesta.rows) === '[]') {
 
-       //Se le asigna null a la respuesta
-       respuesta1 = null;
 
-   }
-   /**En caso contrario quiere decir que si arrojó 1 registro
-    * por lo tanto se le asigna a la respuesta los valores de los atributos
-    * del registro encontrado que está en la primera posición del array */
-   else {
-       respuesta1 = respuesta.rows[0];
 
-       
-   }
 
-   return respuesta1;
-}
+
+
 
 module.exports = {
     LlenarFormulario,
     SolicitudAdopcion,
     obtenerformularios,
-    mostarformularios
+   //mostarformularios
    
 }
