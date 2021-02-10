@@ -287,26 +287,26 @@ router.get("/buscarmascotas", async(req, res) => {
         /**Se toman solo los parámetros necesarios 
          * que vienen en la URL de la petición*/
         const {
-            nombre_tipo,
+            tipo_mascota,
             tamanio,
-            nombre_color
+            color
         } = req.query;
 
         let mascotas;
 
-        /**Se verifica que el parámetro "nombre_tipo" SI se
-         * haya recibido, y que "tamanio" y "nombre_color"
+        /**Se verifica que el parámetro "tipo_mascota" SI se
+         * haya recibido, y que "tamanio" y "color"
          * NO se hayan recibido*/
-        if (nombre_tipo && !tamanio && !nombre_color) {
+        if (tipo_mascota && !tamanio && !color) {
 
             /**Se llama a la función para que se haga la búsqueda
              * de los datos de las mascotas disponibles,
              * y filte solamente 
              * por el parámetro: 
              * 
-             * -"nombre_tipo", de la tabla "tipo_mascotas"
+             * -"tipo_mascota", de la tabla "tipo_mascotas"
              */
-            mascotas = await adops.obtenerPorTipoMascota(nombre_tipo);
+            mascotas = await adops.obtenerPorTipoMascota(tipo_mascota);
 
             /**Si la función retorna null, quiere decir
              * que no se encontraron mascotas registradas con el 
@@ -316,7 +316,7 @@ router.get("/buscarmascotas", async(req, res) => {
 
                 res.status(400).json({
                     ok: false,
-                    msg: `Aún no hay ${nombre_tipo} disponibles en adopción`
+                    msg: `Aún no hay mascotas del tipo número ${tipo_mascota} disponibles en adopción`
                 });
 
             }
@@ -331,9 +331,9 @@ router.get("/buscarmascotas", async(req, res) => {
             }
         }
         /**Se verifica que el parámetro "tamanio" SI se
-         * haya recibido, y que "nombre_tipo" y "nombre_color"
+         * haya recibido, y que "tipo_mascota" y "color"
          * NO se hayan recibido*/
-        else if (tamanio && !nombre_tipo && !nombre_color) {
+        else if (tamanio && !tipo_mascota && !color) {
 
             /**Se llama a la función para que se haga la búsqueda
              * de los datos de las mascotas disponibles,
@@ -366,19 +366,19 @@ router.get("/buscarmascotas", async(req, res) => {
                 });
             }
         }
-        /**Se verifica que el parámetro "nombre_color" SI se
-         * haya recibido, y que "nombre_tipo" y "tamanio"
+        /**Se verifica que el parámetro "color" SI se
+         * haya recibido, y que "tipo_mascota" y "tamanio"
          * NO se hayan recibido*/
-        else if (nombre_color && !nombre_tipo && !tamanio) {
+        else if (color && !tipo_mascota && !tamanio) {
 
             /**Se llama a la función para que se haga la búsqueda
              * de los datos de las mascotas disponibles,
              * y filte solamente 
              * por el campo: 
              * 
-             * -"nombre_color", de la tabla "t_colores"
+             * -"color", de la tabla "t_colores"
              */
-            mascotas = await adops.obtenerPorColor(nombre_color);
+            mascotas = await adops.obtenerPorColor(color);
 
             /**Si la función retorna null, quiere decir
              * que no se encontraron mascotas registradas con el color 
@@ -388,7 +388,7 @@ router.get("/buscarmascotas", async(req, res) => {
 
                 res.status(400).json({
                     ok: false,
-                    msg: `Aún no hay mascotas en adopción registrados con el color: ${nombre_color}`
+                    msg: `Aún no hay mascotas en adopción registrados con el color: ${color}`
                 });
 
             }
@@ -403,20 +403,20 @@ router.get("/buscarmascotas", async(req, res) => {
             }
         }
 
-        /**Se verifica que los parámetros "nombre_tipo" y "tamanio" SI se
-         * hayan recibido, y que "nombre_color" NO se haya recibido*/
-        else if (nombre_tipo && tamanio && !nombre_color) {
+        /**Se verifica que los parámetros "tipo_mascota" y "tamanio" SI se
+         * hayan recibido, y que "color" NO se haya recibido*/
+        else if (tipo_mascota && tamanio && !color) {
 
             /**Se llama a la función para que se haga la búsqueda
              * de los datos de las mascotas disponibles,
              * y filte solamente 
              * por los parámetros:
              *  
-             * -"nombre_tipo" de la tabla "tipos_mascotas"
+             * -"tipo_mascota" de la tabla "tipos_mascotas"
              * 
              * -"tamanio" de la tabla "tamanios"
              */
-            mascotas = await adops.obtenerPorTipoMascotaYTamanio(nombre_tipo, tamanio);
+            mascotas = await adops.obtenerPorTipoMascotaYTamanio(tipo_mascota, tamanio);
 
             /**Si la función retorna null, quiere decir
              * que no se encontraron mascotas registradas con el  
@@ -426,7 +426,7 @@ router.get("/buscarmascotas", async(req, res) => {
 
                 res.status(400).json({
                     ok: false,
-                    msg: `Aún no hay: ${nombre_tipo} de tamaño: ${tamanio} en adopción`
+                    msg: `Aún no hay: ${tipo_mascota} de tamaño: ${tamanio} en adopción`
                 });
 
             }
@@ -440,9 +440,9 @@ router.get("/buscarmascotas", async(req, res) => {
                 });
             }
         }
-        /**Se verifica que los parámetros "tamanio" y "nombre_color" SI se
-         * hayan recibido, y que "nombre_tipo" NO se haya recibido*/
-        if (tamanio && nombre_color && !nombre_tipo) {
+        /**Se verifica que los parámetros "tamanio" y "color" SI se
+         * hayan recibido, y que "tipo_mascota" NO se haya recibido*/
+        if (tamanio && color && !tipo_mascota) {
 
             /**Se llama a la función para que se haga la búsqueda
              * de los datos de las mascotas disponibles,
@@ -451,9 +451,9 @@ router.get("/buscarmascotas", async(req, res) => {
              *  
              * -"tamanio" de la tabla "tamanios"
              * 
-             * -"nombre_color" de la tabla t_colores
+             * -"color" de la tabla t_colores
              */
-            mascotas = await adops.obtenerPorTamanioYColor(tamanio, nombre_color);
+            mascotas = await adops.obtenerPorTamanioYColor(tamanio, color);
 
             /**Si la función retorna null, quiere decir
              * que no se encontraron mascotas registradas con el  
@@ -463,7 +463,7 @@ router.get("/buscarmascotas", async(req, res) => {
 
                 res.status(400).json({
                     ok: false,
-                    msg: `Aún no hay mascotas de tamaño: ${tamanio} y en color: ${nombre_color} en adopción`
+                    msg: `Aún no hay mascotas de tamaño: ${tamanio} y en color: ${color} en adopción`
                 });
 
             }
@@ -477,20 +477,20 @@ router.get("/buscarmascotas", async(req, res) => {
                 });
             }
         }
-        /**Se verifica que los parámetros "nombre_tipo" y "nombre_color" SI se
+        /**Se verifica que los parámetros "tipo_mascota" y "color" SI se
          * hayan recibido, y que "tamanio" NO se haya recibido*/
-        else if (nombre_tipo && nombre_color && !tamanio) {
+        else if (tipo_mascota && color && !tamanio) {
 
             /**Se llama a la función para que se haga la búsqueda
              * de los datos de las mascotas disponibles,
              * y filte solamente 
              * por los parámetros:
              *  
-             * -"nombre_tipo" de la tabla "tipos_mascotas"
+             * -"tipo_mascota" de la tabla "tipos_mascotas"
              * 
-             * -"nombre_color" de ña tabla t_colores
+             * -"color" de ña tabla t_colores
              */
-            mascotas = await adops.obtenerPorTipoMascotaYColor(nombre_tipo, nombre_color);
+            mascotas = await adops.obtenerPorTipoMascotaYColor(tipo_mascota, color);
 
             /**Si la función retorna null, quiere decir
              * que no se encontraron mascotas registradas con el  
@@ -500,7 +500,7 @@ router.get("/buscarmascotas", async(req, res) => {
 
                 res.status(400).json({
                     ok: false,
-                    msg: `Aún no hay ${nombre_tipo} y en color: ${nombre_color} en adopción`
+                    msg: `Aún no hay ${tipo_mascota} y en color: ${color} en adopción`
                 });
 
             }
@@ -515,21 +515,21 @@ router.get("/buscarmascotas", async(req, res) => {
             }
         }
         /**Se verifica que TODOS los parámetros se hayan recibido 
-         * ("nombre_tipo", "tamanio" y "nombre_color")*/
-        else if (nombre_tipo && tamanio && nombre_color) {
+         * ("tipo_mascota", "tamanio" y "color")*/
+        else if (tipo_mascota && tamanio && color) {
 
             /**Se llama a la función para que se haga la búsqueda
              * de los datos de las mascotas disponibles,
              * y filte por los parámetros:
              *  
-             * -"nombre_tipo" de la tabla "tipos_mascotas"
+             * -"tipo_mascota" de la tabla "tipos_mascotas"
              * 
              * -"tamanio" de la tabla "tamanios"
              * 
-             * -"nombre_color" de ña tabla t_colores
+             * -"color" de ña tabla t_colores
              */
             mascotas =
-                await adops.obtenerPorTipoMascotaTamanioYColor(nombre_tipo, tamanio, nombre_color);
+                await adops.obtenerPorTipoMascotaTamanioYColor(tipo_mascota, tamanio, color);
 
             /**Si la función retorna null, quiere decir
              * que no se encontraron mascotas registradas con el  
@@ -539,7 +539,7 @@ router.get("/buscarmascotas", async(req, res) => {
 
                 res.status(400).json({
                     ok: false,
-                    msg: `Aún no hay ${nombre_tipo}, en tamaño: ${tamanio} y en color: ${nombre_color} en adopción`
+                    msg: `Aún no hay ${tipo_mascota}, en tamaño: ${tamanio} y en color: ${color} en adopción`
                 });
 
             }
@@ -554,9 +554,9 @@ router.get("/buscarmascotas", async(req, res) => {
             }
         }
         /**En caso de que no se haya recibido ninguno de los 
-         * parámetros ("nombre_tipo", "tamanio" y "nombre_color")
+         * parámetros ("tipo_mascota", "tamanio" y "color")
          * */
-        else if (!nombre_tipo && !tamanio && !nombre_color) {
+        else if (!tipo_mascota && !tamanio && !color) {
 
             /**Se muestra un mensaje indicándole al usuario
              * que debe colocar por lo menos 1 de los 3 parámetros

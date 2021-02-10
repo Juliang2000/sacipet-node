@@ -83,32 +83,36 @@ const crear = async(req) => {
 
             //////////////////////////////////////////////////////
             let body = req.body
-            if ( body.id_vacuna_Rabia === 'true'){
+            if ( body.id_vacuna_Rabia === true){
                 const respuesta1 = await( pool.query(`INSERT INTO public.t_mascotas_vacunas( id_vacuna, id_mascota)VALUES ($1, $2);`, [1,id_mascota]));
+                console.log('tiene vacuna contra la rabia')
             }else{
                 console.log('no tiene vacuna contra la rabia')
             }
 
 
 
-            if ( body.id_vacuna_Rinotraqueítis === 'true'){
+            if ( body.id_vacuna_Rinotraqueítis === true){
                 const respuesta2 = await( pool.query(`INSERT INTO public.t_mascotas_vacunas(id_vacuna, id_mascota)VALUES ($1, $2);`, [2,id_mascota]));
+                console.log('tiene vacuna contra la Rinotraqueítis')
             }else{
                console.log('no tiene vacuna contra la Rinotraqueítis')
             }
 
 
 
-            if ( body.id_vacuna_Parvovirus === 'true'){
+            if ( body.id_vacuna_Parvovirus === true){
                 const respuesta3 = await( pool.query(`INSERT INTO public.t_mascotas_vacunas( id_vacuna, id_mascota)VALUES ($1, $2);`, [3,id_mascota]));
+                console.log(' tiene vacuna contra la Parvovirus')
                 
             }else{
                 console.log('no tiene vacuna contra la Parvovirus')
             }
 
 
-            if ( body.id_vacuna_Moquillo === 'true'){
-                const respuesta2 = await( pool.query(`INSERT INTO public.t_mascotas_vacunas( id_vacuna, id_mascota)VALUES ($1, $2);`, [ 4,id_mascota]))
+            if ( body.id_vacuna_Moquillo === true){
+                const respuesta2 = await( pool.query(`INSERT INTO public.t_mascotas_vacunas( id_vacuna, id_mascota)VALUES ($1, $2);`, [ 4,id_mascota]));
+                console.log('tiene vacuna contra Moquillo')
                 
             }else{
                 console.log('no tiene vacuna contra Moquillo')
@@ -296,11 +300,11 @@ const obtenerVacunasPorid_mascota = async(id_mascota) => {
 
 /**Obtiene todas las t_mascotas registradas 
  * que sean de un determinado tipo de mascota*/
-const obtenerPorTipoMascota = async(nombre_tipo) => {
+const obtenerPorTipoMascota = async(tipo_mascota) => {
 
     try {
 
-        /**Se utiliza ILIKE para que ignore las mayúsculas y minusculas 
+        /**Se utiliza = para que ignore las mayúsculas y minusculas 
          * en el "nombre_tipo" que se recibe como parámetro
          * 
          * Se hace un LEFT JOIN a la tabla "tamanios" para que se muestren
@@ -331,7 +335,7 @@ const obtenerPorTipoMascota = async(nombre_tipo) => {
                               t_mascotas.id_usuario = t_usuario.id
                               INNER JOIN t_tipos_mascotas ON
                               t_razas.id_tipo_mascota = t_tipos_mascotas.id_tipo_mascota
-                              WHERE t_tipos_mascotas.nombre_tipo ILIKE $1`, [nombre_tipo]);
+                              WHERE t_tipos_mascotas.id_tipo_mascota = $1`, [tipo_mascota]);
 
         /**Para verificar que el resultado de la consulta no arroja ningún registro
          * se convierte la respuesta en un JSONArray y se compara con []
@@ -362,7 +366,7 @@ const obtenerPorTananio = async(tamanio) => {
 
     try {
 
-        /**Se utiliza ILIKE para que ignore las mayúsculas y minusculas 
+        /**Se utiliza = para que ignore las mayúsculas y minusculas 
          * en el "tamanio" que se recibe como parámetro
          */
         let respuesta =
@@ -385,7 +389,7 @@ const obtenerPorTananio = async(tamanio) => {
                               t_mascotas.id_usuario = t_usuario.id
                               INNER JOIN t_tipos_mascotas ON
                               t_razas.id_tipo_mascota = t_tipos_mascotas.id_tipo_mascota
-                              WHERE t_tamanios.tamanio ILIKE $1`, [tamanio]);
+                              WHERE t_tamanios.id_tamanio = $1`, [tamanio]);
 
         /**Para verificar que el resultado de la consulta no arroja ningún registro
          * se convierte la respuesta en un JSONArray y se compara con []
@@ -412,11 +416,11 @@ const obtenerPorTananio = async(tamanio) => {
 
 /**Obtiene todas las t_mascotas registradas 
  * que tengan un determinado color*/
-const obtenerPorColor = async(nombre_color) => {
+const obtenerPorColor = async(color) => {
 
     try {
 
-        /**Se utiliza ILIKE para que ignore las mayúsculas y minusculas 
+        /**Se utiliza = para que ignore las mayúsculas y minusculas 
          * en el "nombre_color" que se recibe como parámetro
          * 
          * Se hace un LEFT JOIN a la tabla "tamanios" para que se muestren
@@ -447,7 +451,7 @@ const obtenerPorColor = async(nombre_color) => {
                               t_mascotas.id_usuario = t_usuario.id
                               INNER JOIN t_tipos_mascotas ON
                               t_razas.id_tipo_mascota = t_tipos_mascotas.id_tipo_mascota
-                              WHERE t_colores.nombre_color ILIKE $1`, [nombre_color]);
+                              WHERE t_colores.id_color = $1`, [color]);
 
         /**Para verificar que el resultado de la consulta no arroja ningún registro
          * se convierte la respuesta en un JSONArray y se compara con []
@@ -474,11 +478,11 @@ const obtenerPorColor = async(nombre_color) => {
 
 /**Obtiene todas las t_mascotas registradas 
  * que tengan un determinado tipo de mascota y tamaño*/
-const obtenerPorTipoMascotaYTamanio = async(nombre_tipo, tamanio) => {
+const obtenerPorTipoMascotaYTamanio = async(tipo_mascota, tamanio) => {
 
     try {
 
-        /**Se utiliza ILIKE para que ignore las mayúsculas y minusculas 
+        /**Se utiliza = para que ignore las mayúsculas y minusculas 
          * en el "nombre_tipo" y "tamanio" que se reciben como parámetro
          */
         let respuesta =
@@ -501,8 +505,8 @@ const obtenerPorTipoMascotaYTamanio = async(nombre_tipo, tamanio) => {
                               t_mascotas.id_usuario = t_usuario.id
                               INNER JOIN t_tipos_mascotas ON
                               t_razas.id_tipo_mascota = t_tipos_mascotas.id_tipo_mascota
-                              WHERE t_tipos_mascotas.nombre_tipo ILIKE $1 AND 
-                              t_tamanios.tamanio ILIKE $2`, [nombre_tipo, tamanio]);
+                              WHERE t_tipos_mascotas.id_tipo_mascota = $1 AND 
+                              t_tamanios.id_tamanio = $2`, [tipo_mascota, tamanio]);
 
         /**Para verificar que el resultado de la consulta no arroja ningún registro
          * se convierte la respuesta en un JSONArray y se compara con []
@@ -529,11 +533,11 @@ const obtenerPorTipoMascotaYTamanio = async(nombre_tipo, tamanio) => {
 
 /**Obtiene todas las t_mascotas registradas 
  * que tengan un determinado tamaño y color*/
-const obtenerPorTamanioYColor = async(tamanio, nombre_color) => {
+const obtenerPorTamanioYColor = async(tamanio, color) => {
 
     try {
 
-        /**Se utiliza ILIKE para que ignore las mayúsculas y minusculas 
+        /**Se utiliza = para que ignore las mayúsculas y minusculas 
          * en el "tamanio" y "nombre_color" que se reciben como parámetro
          */
         let respuesta =
@@ -556,8 +560,8 @@ const obtenerPorTamanioYColor = async(tamanio, nombre_color) => {
                               t_mascotas.id_usuario = t_usuario.id
                               INNER JOIN t_tipos_mascotas ON
                               t_razas.id_tipo_mascota = t_tipos_mascotas.id_tipo_mascota
-                              WHERE t_tamanios.tamanio ILIKE $1 
-                              AND t_colores.nombre_color ILIKE $2`, [tamanio, nombre_color]);
+                              WHERE t_tamanios.id_tamanio = $1 
+                              AND t_colores.id_color = $2`, [tamanio, color]);
 
         /**Para verificar que el resultado de la consulta no arroja ningún registro
          * se convierte la respuesta en un JSONArray y se compara con []
@@ -584,11 +588,11 @@ const obtenerPorTamanioYColor = async(tamanio, nombre_color) => {
 
 /**Obtiene todas las t_mascotas registradas 
  * que tengan un determinado tipo de mascota y color*/
-const obtenerPorTipoMascotaYColor = async(nombre_tipo, nombre_color) => {
+const obtenerPorTipoMascotaYColor = async(tipo_mascota, color) => {
 
     try {
 
-        /**Se utiliza ILIKE para que ignore las mayúsculas y minusculas 
+        /**Se utiliza = para que ignore las mayúsculas y minusculas 
          * en el "nombre_tipo" y "nombre_color" que se reciben como parámetro
          * 
          * Se hace un LEFT JOIN a la tabla "tamanios" para que se muestren
@@ -619,8 +623,8 @@ const obtenerPorTipoMascotaYColor = async(nombre_tipo, nombre_color) => {
                               t_mascotas.id_usuario = t_usuario.id
                               INNER JOIN t_tipos_mascotas ON
                               t_razas.id_tipo_mascota = t_tipos_mascotas.id_tipo_mascota
-                              WHERE t_tipos_mascotas.nombre_tipo ILIKE $1 AND 
-                              t_colores.nombre_color ILIKE $2`, [nombre_tipo, nombre_color]);
+                              WHERE t_tipos_mascotas.id_tipo_mascota = $1 AND 
+                              t_colores.id_color = $2`, [tipo_mascota, color]);
 
         /**Para verificar que el resultado de la consulta no arroja ningún registro
          * se convierte la respuesta en un JSONArray y se compara con []
@@ -647,11 +651,11 @@ const obtenerPorTipoMascotaYColor = async(nombre_tipo, nombre_color) => {
 
 /**Obtiene todas las t_mascotas registradas 
  * que tengan un determinado tipo de mascota, tamanio y color*/
-const obtenerPorTipoMascotaTamanioYColor = async(nombre_tipo, tamanio, nombre_color) => {
+const obtenerPorTipoMascotaTamanioYColor = async(tipo_mascota, tamanio, color) => {
 
     try {
 
-        /**Se utiliza ILIKE para que ignore las mayúsculas y minusculas 
+        /**Se utiliza = para que ignore las mayúsculas y minusculas 
          * en el "nombre_tipo", "tamanio" 
          * y "nombre_color" que se reciben como parámetro
          *
@@ -680,12 +684,12 @@ const obtenerPorTipoMascotaTamanioYColor = async(nombre_tipo, tamanio, nombre_co
                               t_mascotas.id_usuario = t_usuario.id
                               INNER JOIN t_tipos_mascotas ON
                               t_razas.id_tipo_mascota = t_tipos_mascotas.id_tipo_mascota
-                              WHERE t_tipos_mascotas.nombre_tipo ILIKE $1 AND 
-                              t_tamanios.tamanio ILIKE $2
-                              AND t_colores.nombre_color ILIKE $3`, [
-                nombre_tipo,
+                              WHERE t_tipos_mascotas.id_tipo_mascota = $1 AND 
+                              t_tamanios.id_tamanio = $2
+                              AND t_colores.id_color = $3`, [
+                tipo_mascota,
                 tamanio,
-                nombre_color
+                color
             ]);
 
         /**Para verificar que el resultado de la consulta no arroja ningún registro

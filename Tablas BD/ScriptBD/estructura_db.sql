@@ -547,111 +547,6 @@ VALUES ('Gris');
 INSERT INTO public.t_colores(nombre_color)
 VALUES ('Blanco');
 
---Tabla t_mascotas
--- Table: public.t_mascotas
-
--- DROP TABLE public.t_mascotas;
-
-CREATE TABLE public.t_mascotas
-(
-    id_mascota integer NOT NULL DEFAULT nextval('t_mascotas_id_mascota_seq'::regclass),
-    nombre_mascota character varying COLLATE pg_catalog."default",
-    edad_mascota integer NOT NULL,
-    escala_edad integer NOT NULL,
-    esterilizado integer,
-    genero_mascota character varying COLLATE pg_catalog."default",
-    id_raza integer NOT NULL,
-    id_tamanio integer,
-    id_color integer NOT NULL,
-    descripcion_mascota character varying COLLATE pg_catalog."default",
-    id_usuario integer NOT NULL,
-    tipo_tramite integer NOT NULL,
-    id_codigo integer,
-    CONSTRAINT t_mascotas_pkey PRIMARY KEY (id_mascota),
-    CONSTRAINT t_mascotas_id_codigo_fk FOREIGN KEY (id_codigo)
-        REFERENCES public.t_ubicaciones_geograficas (id_codigo) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION,
-    CONSTRAINT t_mascotas_id_color_fk FOREIGN KEY (id_color)
-        REFERENCES public.t_colores (id_color) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION,
-    CONSTRAINT t_mascotas_id_raza_fk FOREIGN KEY (id_raza)
-        REFERENCES public.t_razas (id_raza) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION,
-    CONSTRAINT t_mascotas_id_tamanio_fk FOREIGN KEY (id_tamanio)
-        REFERENCES public.t_tamanios (id_tamanio) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION,
-    CONSTRAINT t_mascotas_id_usuario_fk FOREIGN KEY (id_usuario)
-        REFERENCES public.t_usuario (id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
-)
-
-TABLESPACE pg_default;
-
-ALTER TABLE public.t_mascotas
-    OWNER to veterinarias;
-
---Se le coloca la restricción de la llave foránea del campo id_raza, que viene 
---de la tabla t_razas a la tabla t_mascotas
-ALTER TABLE t_mascotas ADD CONSTRAINT t_mascotas_id_raza_fk FOREIGN KEY (id_raza) REFERENCES t_razas(id_raza);
-
---Se le coloca la restricción de la llave foránea del campo id_tamanio, que viene 
---de la tabla t_tamanios a la tabla t_mascotas
-ALTER TABLE t_mascotas ADD CONSTRAINT t_mascotas_id_tamanio_fk FOREIGN KEY (id_tamanio) REFERENCES t_tamanios(id_tamanio);
-
---Se le coloca la restricción de la llave foránea del campo id_usuario, que viene 
---de la tabla t_usuario a la tabla t_mascotas
-ALTER TABLE t_mascotas ADD CONSTRAINT t_mascotas_id_usuario_fk FOREIGN KEY (id_usuario) REFERENCES t_usuario(id);
-
---Se le coloca la restricción de la llave foránea del campo id_color, que viene 
---de la tabla t_colores a la tabla t_mascotas
-ALTER TABLE t_mascotas ADD CONSTRAINT t_mascotas_id_color_fk FOREIGN KEY (id_color) REFERENCES t_colores(id_color);
-
-
---Tabla t_fotos
-
-CREATE TABLE public.t_fotos
-(
-    id integer NOT NULL,
-    ruta_guardado character varying,
-    nombre_imagen character varying,
-    id_mascota int4 NOT NULL,
-    CONSTRAINT t_fotos_pkey PRIMARY KEY (id)
-);
-
-ALTER TABLE public.t_fotos ADD COLUMN consecutivo integer NOT NULL;
-
-CREATE SEQUENCE t_fotos_id_seq;
-ALTER TABLE t_fotos ALTER COLUMN id SET DEFAULT nextval('t_fotos_id_seq'::regclass);
-
---Se le coloca la restricción de la llave foránea del campo id_mascota, que viene 
---de la tabla t_mascotas a la tabla t_fotos
-ALTER TABLE t_fotos ADD CONSTRAINT t_fotos_id_mascota_fk FOREIGN KEY (id_mascota) REFERENCES t_mascotas(id_mascota);
-
---Tabla que relaciona a la tabla t_mascotas con la tabla t_vacunas
-CREATE TABLE public.t_mascotas_vacunas
-(
-    id integer NOT NULL,
-    id_vacuna int4 NOT NULL,
-    id_mascota int4 NOT NULL,
-    CONSTRAINT t_mascotas_vacunas_pkey PRIMARY KEY (id)
-);
-
-CREATE SEQUENCE t_mascotas_vacunas_id_seq;
-ALTER TABLE t_mascotas_vacunas ALTER COLUMN id SET DEFAULT nextval('t_mascotas_vacunas_id_seq'::regclass);
-
---Se le coloca la restricción de la llave foránea del campo id_vacuna, que viene 
---de la tabla t_vacunas a la tabla t_mascotas_vacunas
-ALTER TABLE t_mascotas_vacunas ADD CONSTRAINT t_mascotas_vacunas_id_vacuna_fk FOREIGN KEY (id_vacuna) REFERENCES t_vacunas(id);
-
---Se le coloca la restricción de la llave foránea del campo id_mascota, que viene 
---de la tabla t_mascotas a la tabla t_mascotas_vacunas
-ALTER TABLE t_mascotas_vacunas ADD CONSTRAINT t_mascotas_vacunas_id_mascota_fk FOREIGN KEY (id_mascota) REFERENCES t_mascotas(id_mascota);
-
 --Tabla ubicaciones geograficas 
 CREATE TABLE public.t_ubicaciones_geograficas (
     id_codigo integer NOT NULL,
@@ -661,6 +556,8 @@ CREATE TABLE public.t_ubicaciones_geograficas (
     codigo_dane integer NOT NULL,
     tipo character varying NOT NULL
 );
+
+ALTER TABLE public.t_ubicaciones_geograficas  ADD PRIMARY KEY (id_codigo);
 
 --t_departamentos de Colombia
 
@@ -1823,6 +1720,114 @@ INSERT INTO public.t_ubicaciones_geograficas (id_codigo, descripcion, id_unde, v
 
 
 
+--Tabla t_mascotas
+-- Table: public.t_mascotas
+
+-- DROP TABLE public.t_mascotas;
+CREATE SEQUENCE t_mascotas_id_mascota_seq;
+
+CREATE TABLE public.t_mascotas
+(
+    id_mascota integer NOT NULL DEFAULT nextval('t_mascotas_id_mascota_seq'::regclass),
+    nombre_mascota character varying COLLATE pg_catalog."default",
+    edad_mascota integer NOT NULL,
+    escala_edad integer NOT NULL,
+    esterilizado integer,
+    genero_mascota character varying COLLATE pg_catalog."default",
+    id_raza integer NOT NULL,
+    id_tamanio integer,
+    id_color integer NOT NULL,
+    descripcion_mascota character varying COLLATE pg_catalog."default",
+    id_usuario integer NOT NULL,
+    tipo_tramite integer NOT NULL,
+    id_codigo integer,
+    CONSTRAINT t_mascotas_pkey PRIMARY KEY (id_mascota),
+    CONSTRAINT t_mascotas_id_codigo_fk FOREIGN KEY (id_codigo)
+        REFERENCES public.t_ubicaciones_geograficas (id_codigo) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT t_mascotas_id_color_fk FOREIGN KEY (id_color)
+        REFERENCES public.t_colores (id_color) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT t_mascotas_id_raza_fk FOREIGN KEY (id_raza)
+        REFERENCES public.t_razas (id_raza) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT t_mascotas_id_tamanio_fk FOREIGN KEY (id_tamanio)
+        REFERENCES public.t_tamanios (id_tamanio) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT t_mascotas_id_usuario_fk FOREIGN KEY (id_usuario)
+        REFERENCES public.t_usuario (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+-- ALTER TABLE public.t_mascotas
+--     OWNER to veterinarias;
+
+--Se le coloca la restricción de la llave foránea del campo id_raza, que viene 
+--de la tabla t_razas a la tabla t_mascotas
+-- ALTER TABLE t_mascotas ADD CONSTRAINT t_mascotas_id_raza_fk FOREIGN KEY (id_raza) REFERENCES t_razas(id_raza);
+
+--Se le coloca la restricción de la llave foránea del campo id_tamanio, que viene 
+--de la tabla t_tamanios a la tabla t_mascotas
+-- ALTER TABLE t_mascotas ADD CONSTRAINT t_mascotas_id_tamanio_fk FOREIGN KEY (id_tamanio) REFERENCES t_tamanios(id_tamanio);
+
+--Se le coloca la restricción de la llave foránea del campo id_usuario, que viene 
+--de la tabla t_usuario a la tabla t_mascotas
+-- ALTER TABLE t_mascotas ADD CONSTRAINT t_mascotas_id_usuario_fk FOREIGN KEY (id_usuario) REFERENCES t_usuario(id);
+
+--Se le coloca la restricción de la llave foránea del campo id_color, que viene 
+--de la tabla t_colores a la tabla t_mascotas
+-- ALTER TABLE t_mascotas ADD CONSTRAINT t_mascotas_id_color_fk FOREIGN KEY (id_color) REFERENCES t_colores(id_color);
+
+
+--Tabla t_fotos
+
+CREATE TABLE public.t_fotos
+(
+    id integer NOT NULL,
+    ruta_guardado character varying,
+    nombre_imagen character varying,
+    id_mascota int4 NOT NULL,
+    CONSTRAINT t_fotos_pkey PRIMARY KEY (id)
+);
+
+ALTER TABLE public.t_fotos ADD COLUMN consecutivo integer NOT NULL;
+
+CREATE SEQUENCE t_fotos_id_seq;
+ALTER TABLE t_fotos ALTER COLUMN id SET DEFAULT nextval('t_fotos_id_seq'::regclass);
+
+--Se le coloca la restricción de la llave foránea del campo id_mascota, que viene 
+--de la tabla t_mascotas a la tabla t_fotos
+ALTER TABLE t_fotos ADD CONSTRAINT t_fotos_id_mascota_fk FOREIGN KEY (id_mascota) REFERENCES t_mascotas(id_mascota);
+
+--Tabla que relaciona a la tabla t_mascotas con la tabla t_vacunas
+CREATE TABLE public.t_mascotas_vacunas
+(
+    id integer NOT NULL,
+    id_vacuna int4 NOT NULL,
+    id_mascota int4 NOT NULL,
+    CONSTRAINT t_mascotas_vacunas_pkey PRIMARY KEY (id)
+);
+
+CREATE SEQUENCE t_mascotas_vacunas_id_seq;
+ALTER TABLE t_mascotas_vacunas ALTER COLUMN id SET DEFAULT nextval('t_mascotas_vacunas_id_seq'::regclass);
+
+--Se le coloca la restricción de la llave foránea del campo id_vacuna, que viene 
+--de la tabla t_vacunas a la tabla t_mascotas_vacunas
+ALTER TABLE t_mascotas_vacunas ADD CONSTRAINT t_mascotas_vacunas_id_vacuna_fk FOREIGN KEY (id_vacuna) REFERENCES t_vacunas(id);
+
+--Se le coloca la restricción de la llave foránea del campo id_mascota, que viene 
+--de la tabla t_mascotas a la tabla t_mascotas_vacunas
+ALTER TABLE t_mascotas_vacunas ADD CONSTRAINT t_mascotas_vacunas_id_mascota_fk FOREIGN KEY (id_mascota) REFERENCES t_mascotas(id_mascota);
+
+
+
 --tabla para formulario de adopcion
 
 	
@@ -1886,6 +1891,7 @@ ALTER TABLE t_formulario
    REFERENCES t_usuario(id);
 
 
+
 --tabla para vincular los formularios de adopcion a la mascota
 create table t_mascotas_formulario(
   id serial,
@@ -1902,3 +1908,7 @@ create table t_mascotas_formulario(
         ON DELETE NO ACTION
 
  );
+
+
+alter table t_mascotas_formulario
+  add solicitud_adopcion BOOLEAN;
