@@ -5,7 +5,7 @@ const { obtenerPorIdTipoMascotaYTamanio } = require('../controllers/razasPorTipo
 //=========================================================
 //Mostrar todos las razas dependiendo del tipo de mascota
 //=========================================================
-router.get("/razasTipoTamano", async(req, res) => {
+router.post("/razasTipoTamano", async(req, res) => {
 
     try {
 
