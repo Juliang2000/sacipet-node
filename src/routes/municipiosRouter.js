@@ -5,7 +5,7 @@ const { obtenerPorIdUndeMunicipio } = require('../controllers/municipios.control
 //=========================================================
 //Mostrar todos las municipios dependiendo del tipo de departamento
 //=========================================================
-router.get("/municipios", async(req, res) => {
+router.post("/municipios", async(req, res) => {
 
     try {
 
