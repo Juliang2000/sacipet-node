@@ -4,7 +4,7 @@ const pool = require('../database/dbConection');
 const obtenerTodos = async() => {
     try {
         let respuesta =
-            await pool.query('SELECT id_codigo,descripcion FROM t_ubicaciones_geograficas WHERE t_ubicaciones_geograficas.id_unde=1 AND t_ubicaciones_geograficas.vigente=true');
+            await pool.query("SELECT id_codigo,descripcion FROM t_ubicaciones_geograficas WHERE t_ubicaciones_geograficas.id_unde=1 AND t_ubicaciones_geograficas.vigente='true'");
 
         /**Para verificar que el resultado de la consulta no arroja ningún registro
          * se convierte la respuesta en un JSONArray y se compara con []
