@@ -482,4 +482,65 @@ router.post("/formulariopeticion", async(req, res) => {
 
 
 
+router.post("/filtro", async (req, res) => {
+
+    try {
+
+        const {
+            id_tipo_mascota
+
+        } = req.body;
+
+
+        const campos = [
+            {
+                nombre: 'id_tipo_mascota',
+                campo: id_tipo_mascota
+            }
+        ];
+
+
+        const campoVacio = campos.find(x => !x.campo);
+
+
+        if (campoVacio) {
+
+            return res.status(400).json({
+                ok: false,
+                msg: `No ha ingresado el campo ${campoVacio.nombre}`
+            });
+        }
+
+        const id_formul = await adops.Filtro(req);
+        
+        if (id_formul === null) {
+
+            res.status(500).json({
+                ok: false,
+                msg: `Ocurrió un error al guardar la adopción`
+            });
+        }
+
+        else {
+
+            res.json({
+                ok: true,
+                msg: ` respuesta exitosa`,
+                id_formul
+
+            });
+        }
+
+    } catch (err) {
+        console.log(err);
+
+        res.status(500).json({
+            ok: false,
+            error: err.message
+        });
+
+    }
+});
+
+
 module.exports = { router };
