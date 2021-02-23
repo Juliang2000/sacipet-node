@@ -204,36 +204,42 @@ const obtenerPorId = async(id_mascota) => {
 }
 
 /**Obtiene todos datos de las t_mascotas registradas */
-const obtenerTodas = async() => {
+const obtenerTodas = async(req, res) => {
+    
     try {
+    
         let respuesta =
-            await pool.query(`SELECT t_mascotas.id_mascota, t_tipos_mascotas.nombre_tipo AS "tipo_mascota",
-                              t_mascotas.nombre_mascota, t_mascotas.edad_mascota, 
-                              t_mascotas.genero_mascota, t_razas.nombre_raza, 
-                              CASE 
-                              WHEN(t_tamanios.tamanio IS NULL) THEN 'N/A'
-                              ELSE t_tamanios.tamanio
-                              END AS tamaño, 
-                              t_colores.nombre_color,
-                              CASE
-                              WHEN(t_mascotas.descripcion_mascota IS NULL) THEN 'N/A'
-                              ELSE t_mascotas.descripcion_mascota
-                              END AS descripcion_mascota, 
-                              t_usuario.nombres || ' ' || t_usuario.apellidos AS "propietario"  
-                              FROM t_mascotas INNER JOIN t_colores ON
-                              t_mascotas.id_color = t_colores.id_color
-                              INNER JOIN t_razas ON
-                              t_mascotas.id_raza = t_razas.id_raza
-                              LEFT JOIN t_tamanios ON
-                              t_mascotas.id_tamanio = t_tamanios.id_tamanio
-                              INNER JOIN t_usuario ON
-                              t_mascotas.id_usuario = t_usuario.id
-                              INNER JOIN t_tipos_mascotas ON
-                              t_razas.id_tipo_mascota = t_tipos_mascotas.id_tipo_mascota`);
+            await pool.query(`SELECT * FROM v_mascotas_vac`);
 
         /**Para verificar que el resultado de la consulta no arroja ningún registro
          * se convierte la respuesta en un JSONArray y se compara con []
          */
+/////////////////////////////////////////////////////////////////////
+     /**   for (var i = 0; i < respuesta.rows.length; i++) {
+           
+            //resp =respuesta.rows[i].id_mascota
+            
+            console.log(respuesta.rows[i].id_mascota)
+            const idFoto = await obtenerNombreFoto.obtenerIdFoto(respuesta.rows[i].id_mascota,1);
+            
+        //Se verifica si el id_mascota se encuentra registrado*/
+      
+        //Se captura el nombre del adjunto, a partir del link de entrada y se concatena con el id_mascota y el consecutivo
+       // const fileName = idFoto+'.jpg';  
+        //Se define la ruta de guardado
+       // const directoryPath = __dirname + "/../uploads/";
+        //Se descarga la foto correspondiente
+       // res.download(directoryPath + fileName, fileName, (err) => {
+        //    if (err) {
+              //res.status(500).send({
+              //  message: "Could not download the file. " + err,
+            //  });
+          //  }
+        //});
+
+
+        // }
+        /////////////////////////////////////////////////////////////////////////////////////
         if (JSON.stringify(respuesta.rows) === '[]') {
 
             //Se le asigna null a la respuesta
@@ -244,6 +250,10 @@ const obtenerTodas = async() => {
          * por lo tanto se le asigna a la respuesta los valores de los atributos
          * de todos los registros encontrados*/
         else {
+         
+        
+          
+       
             respuesta = respuesta.rows;
         }
 
@@ -253,8 +263,6 @@ const obtenerTodas = async() => {
         throw new Error(`Archivo mascotas.controller.js -> obtenerTodas()\n${err}`);
     }
 }
-
-
 /**Obtiene todos los nombres de las vacunas agregadas
  * a un determinado registro dentro de la tabla "t_mascotas"
  * 

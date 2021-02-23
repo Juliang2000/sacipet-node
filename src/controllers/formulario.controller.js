@@ -305,6 +305,53 @@ const obtenerformularios = async(req) => {
     }
 }
 
+////Filtro
+
+
+const Filtro = async(req) => {
+
+    try {
+
+        const {
+            id_tipo_mascota, 
+            id_raza,
+            id_tamanio ,
+            genero_mascota 
+        } = req.body;
+
+        
+
+        let respuesta =
+       
+        
+            await pool.query(`		
+            select * from v_mascotas2 where id_tipo_mascota= $1 AND id_raza=$2 AND id_tamanio=$3 AND genero_mascota=$4 order by id_mascota;`, [ id_tipo_mascota, id_raza,id_tamanio,genero_mascota]);
+           
+
+        /**Para verificar que el resultado de la consulta no arroja ningún registro
+         * se convierte la respuesta en un JSONArray y se compara con []
+         */
+        if (JSON.stringify(respuesta.rows) === '[]') {
+
+            //Se le asigna null a la respuesta
+            respuesta = null;
+
+        }
+        /**En caso contrario quiere decir que si arrojó 1 registro
+         * por lo tanto se le asigna a la respuesta los valores de los atributos
+         * del registro encontrado que está en la primera posición del array */
+        else {
+            respuesta = respuesta.rows[0];
+
+            
+        }
+
+        return respuesta;
+
+    } catch (err) {
+        throw new Error(`Archivo mascotas.controller.js->obtenerPorId()\n${err}`);
+    }
+}
 
 
 
@@ -320,5 +367,5 @@ module.exports = {
     SolicitudAdopcion,
     obtenerformularios,
    //mostarformularios
-   
+   Filtro
 }

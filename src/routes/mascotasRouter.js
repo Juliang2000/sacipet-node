@@ -237,9 +237,16 @@ router.post("/mascotas", async(req, res) => {
 //===========================================
 //Mostrar todas las mascotas registradas
 //===========================================
+
 router.get("/mascotas", async(req, res) => {
 
     try {
+
+        const {
+            id_mascota,
+            consecutivo
+    
+        } = req.body;
 
         /**Se obtienen todas las mascotas registradas en la tabla
          * "mascotas" y se guarda el resultado de la consulta dentro
@@ -247,6 +254,8 @@ router.get("/mascotas", async(req, res) => {
          */
         
         const mascotas = await adops.obtenerTodas();
+        
+       // const mascotas2 = await route.downloadController.downloandFile(1,2);
         /**Si la función retorna null, quiere decir
          * que no se encontraron mascotas registradas
          */
@@ -260,7 +269,8 @@ router.get("/mascotas", async(req, res) => {
         } else {
             res.json({
                 ok: true,
-                mascotas
+                mascotas,
+              //  mascotas2
             })
         }
 
@@ -275,7 +285,6 @@ router.get("/mascotas", async(req, res) => {
     }
 
 });
-
 
 //===========================================
 /**Mostrar las mascotas fitrándolas por: 
