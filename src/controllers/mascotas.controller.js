@@ -82,41 +82,51 @@ const crear = async(req) => {
   
 
             //////////////////////////////////////////////////////
+            let iterador =0;
             let body = req.body
-            if ( body.id_vacuna_Rabia === true){
+            if ( body.id_vacuna_Rabia === 'true'){
                 const respuesta1 = await( pool.query(`INSERT INTO public.t_mascotas_vacunas( id_vacuna, id_mascota)VALUES ($1, $2);`, [1,id_mascota]));
                 console.log('tiene vacuna contra la rabia')
             }else{
                 console.log('no tiene vacuna contra la rabia')
+                iterador ++;
             }
 
 
 
-            if ( body.id_vacuna_Rinotraqueítis === true){
+            if ( body.id_vacuna_Rinotraqueítis === 'true'){
                 const respuesta2 = await( pool.query(`INSERT INTO public.t_mascotas_vacunas(id_vacuna, id_mascota)VALUES ($1, $2);`, [2,id_mascota]));
                 console.log('tiene vacuna contra la Rinotraqueítis')
             }else{
                console.log('no tiene vacuna contra la Rinotraqueítis')
+               iterador ++;
             }
 
 
 
-            if ( body.id_vacuna_Parvovirus === true){
+            if ( body.id_vacuna_Parvovirus === 'true'){
                 const respuesta3 = await( pool.query(`INSERT INTO public.t_mascotas_vacunas( id_vacuna, id_mascota)VALUES ($1, $2);`, [3,id_mascota]));
                 console.log(' tiene vacuna contra la Parvovirus')
                 
             }else{
                 console.log('no tiene vacuna contra la Parvovirus')
+                iterador ++;
             }
 
 
-            if ( body.id_vacuna_Moquillo === true){
+            if ( body.id_vacuna_Moquillo === 'true'){
                 const respuesta2 = await( pool.query(`INSERT INTO public.t_mascotas_vacunas( id_vacuna, id_mascota)VALUES ($1, $2);`, [ 4,id_mascota]));
                 console.log('tiene vacuna contra Moquillo')
                 
             }else{
                 console.log('no tiene vacuna contra Moquillo')
-               
+                iterador ++;
+            }
+            console.log( iterador)
+            if(iterador===4){
+                const respuesta5 = await( pool.query(`INSERT INTO public.t_mascotas_vacunas( id_vacuna, id_mascota)VALUES ($1, $2);`, [ 0,id_mascota]));
+                console.log('no tiene vacunas')
+                
             }
 
 
@@ -209,36 +219,49 @@ const obtenerTodas = async(req, res) => {
     try {
     
         let respuesta =
-            await pool.query(`SELECT * FROM v_mascotas_vac`);
-
-        /**Para verificar que el resultado de la consulta no arroja ningún registro
-         * se convierte la respuesta en un JSONArray y se compara con []
-         */
-/////////////////////////////////////////////////////////////////////
-     /**   for (var i = 0; i < respuesta.rows.length; i++) {
-           
-            //resp =respuesta.rows[i].id_mascota
+            await pool.query(` SELECT 
+            id_mascota, nombre_mascota, edad_mascota, escala_edad, descripcion_mascota,
+          tipo_tramite, esterilizado, id_codigo, id_municipio, municipio, id_departamento, 
+          departameto, id_pais, pais, id_color, color, id_raza, raza, id_tipo_mascota, 
+          id_tamanio, tamanio, genero_mascota, tipo, id_usuario, nombres, id_mascotaa, 
+          ruta_guardado, nombre_imagen, consecutivo,  STRING_AGG(nombre_vac, ',') 
+          FROM v_mascotas_vac2
+          GROUP BY id_mascota, nombre_mascota, edad_mascota, escala_edad, descripcion_mascota,
+          tipo_tramite, esterilizado, id_codigo, id_municipio, municipio, id_departamento, 
+          departameto, id_pais, pais, id_color, color, id_raza, raza, id_tipo_mascota, 
+          id_tamanio, tamanio, genero_mascota, tipo, id_usuario, nombres, id_mascotaa, 
+          ruta_guardado, nombre_imagen, consecutivo;`);
+       /*  let re;
+            for (var i = 0; i < respuesta.rows.length; i++) {
+                let k = i-1;
+              for (var j = 1; j < respuesta.rows.length; j++) {
+                if(respuesta.rows[i].id_mascota == re && respuesta.rows[i].id_mascota==respuesta.rows[j].id_mascota){
+                   respuesta.rows[k].nombre_vac3=respuesta.rows[j].nombre_vac
+              //     delete respuesta.rows[j];
+                    
+                   
+              }
+               if(respuesta.rows[i].id_mascota == re){
+                   
+                respuesta.rows[k].nombre_vac2=respuesta.rows[i].nombre_vac
+              
+                
+               
+                   // let elementosEliminados = respuesta.rows.splice(j,1)
+                
+                 
+                   
+               }
             
-            console.log(respuesta.rows[i].id_mascota)
-            const idFoto = await obtenerNombreFoto.obtenerIdFoto(respuesta.rows[i].id_mascota,1);
+              }
+              
+                
+         
+               re=respuesta.rows[i].id_mascota
+               
+            } */
             
-        //Se verifica si el id_mascota se encuentra registrado*/
-      
-        //Se captura el nombre del adjunto, a partir del link de entrada y se concatena con el id_mascota y el consecutivo
-       // const fileName = idFoto+'.jpg';  
-        //Se define la ruta de guardado
-       // const directoryPath = __dirname + "/../uploads/";
-        //Se descarga la foto correspondiente
-       // res.download(directoryPath + fileName, fileName, (err) => {
-        //    if (err) {
-              //res.status(500).send({
-              //  message: "Could not download the file. " + err,
-            //  });
-          //  }
-        //});
-
-
-        // }
+              
         /////////////////////////////////////////////////////////////////////////////////////
         if (JSON.stringify(respuesta.rows) === '[]') {
 
@@ -252,7 +275,7 @@ const obtenerTodas = async(req, res) => {
         else {
          
         
-          
+            
        
             respuesta = respuesta.rows;
         }

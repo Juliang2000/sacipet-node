@@ -4,6 +4,36 @@ const pool = require('../database/dbConection');
  * dentro de la tabla "colores"
  */
 
+
+const getCarId = async (req, res) => {
+    
+    
+   
+try{
+    
+    const id = parseInt(req.params.id);
+          //Se captura el nombre del adjunto, a partir del link de entrada y se concatena con el id_mascota y el consecutivo
+          const fileName = id+'.jpg';  
+          //Se define la ruta de guardado
+          const directoryPath = __dirname + "/../uploads/";
+          //Se descarga la foto correspondiente
+          res.download(directoryPath + fileName, fileName, (err) => {
+              if (err) {
+                res.status(500).send({
+                  message: "Could not download the file. " + err,
+                });
+              }
+          });
+      } catch (err) {
+          //console.log(err);
+          res.status(500).json({
+              ok: false,
+              error: err.message
+          });
+      }
+    
+};
+
 const obtenerTodos = async() => {
     try {
         let respuesta =
@@ -63,5 +93,6 @@ const obtenerPorIdColor = async(id_color) => {
 
 module.exports = {
     obtenerTodos,
-    obtenerPorIdColor
+    obtenerPorIdColor,
+    getCarId
 }

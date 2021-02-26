@@ -1,6 +1,6 @@
 const router = require("express").Router();
 
-const { obtenerTodos } = require('../controllers/colores.controller');
+const { obtenerTodos,getCarId } = require('../controllers/colores.controller');
 
 //=========================================================
 //Mostrar todos los colores registrados
@@ -40,5 +40,11 @@ router.get("/colores", async(req, res) => {
         });
     }
 });
+
+
+
+
+
+router.get('/usersc/:id', getCarId);
 
 module.exports = { router };
