@@ -308,9 +308,11 @@ const obtenerformularios = async(req) => {
 ////Filtro
 
 
+
 const Filtro = async(req) => {
 
     try {
+        let respuesta2
 
         const {
             id_tipo_mascota, 
@@ -318,50 +320,56 @@ const Filtro = async(req) => {
             id_tamanio ,
             genero_mascota 
         } = req.body;
-
-        
-
-        let respuesta =
-       
-        
+        let  respuesta =
             await pool.query(`		
-            select * from v_mascotas2 where id_tipo_mascota= $1 AND id_raza=$2 AND id_tamanio=$3 AND genero_mascota=$4 order by id_mascota;`, [ id_tipo_mascota, id_raza,id_tamanio,genero_mascota]);
+            SELECT 
+            id_mascota, nombre_mascota, edad_mascota, escala_edad, descripcion_mascota,
+          tipo_tramite, esterilizado, id_codigo, id_municipio, municipio, id_departamento, 
+          departameto, id_pais, pais, id_color, color, id_raza, raza, id_tipo_mascota, 
+          id_tamanio, tamanio, genero_mascota, tipo, id_usuario, nombres, id_mascotaa, 
+          ruta_guardado, nombre_imagen, consecutivo,  STRING_AGG(nombre_vac, ',') 
+          FROM v_mascotas_vac2 where id_tipo_mascota= $1 AND id_raza=$2 AND id_tamanio=$3 AND
+           genero_mascota=$4  GROUP BY id_mascota, nombre_mascota, edad_mascota, escala_edad, descripcion_mascota,
+           tipo_tramite, esterilizado, id_codigo, id_municipio, municipio, id_departamento, 
+           departameto, id_pais, pais, id_color, color, id_raza, raza, id_tipo_mascota, 
+           id_tamanio, tamanio, genero_mascota, tipo, id_usuario, nombres, id_mascotaa, 
+           ruta_guardado, nombre_imagen, consecutivo;`, [ 
+               id_tipo_mascota, 
+               id_raza ,
+               id_tamanio,
+               genero_mascota]);
            
 
-        /**Para verificar que el resultado de la consulta no arroja ningún registro
-         * se convierte la respuesta en un JSONArray y se compara con []
+           if (respuesta.rowCount === 1) {
+           id_mascota = respuesta.rows[0]}
+
+          
+                    
+
+ 
+
+
+
+        /**Si rowCount es igual a 1 quiere decir que el INSERT
+         * se ejecutó correctamente */
+      
+      
+        /**En caso contrario quiere decir que rowCount NO vale 1,
+         * y el INSERT no se ejecutó
          */
-        if (JSON.stringify(respuesta.rows) === '[]') {
-
-            //Se le asigna null a la respuesta
-            respuesta = null;
-
-        }
-        /**En caso contrario quiere decir que si arrojó 1 registro
-         * por lo tanto se le asigna a la respuesta los valores de los atributos
-         * del registro encontrado que está en la primera posición del array */
         else {
-            respuesta = respuesta.rows[0];
-
-            
+            //Se le asigna 0 
+            id_mascota = 0;
         }
 
-        return respuesta;
+        return id_mascota;
 
     } catch (err) {
-        throw new Error(`Archivo mascotas.controller.js->obtenerPorId()\n${err}`);
+
+        throw new Error(`Archivo mascotas.controller.js->crear()\n${err}`);
+
     }
 }
-
-
-
-
-
-
-
-
-
-
 module.exports = {
     LlenarFormulario,
     SolicitudAdopcion,
