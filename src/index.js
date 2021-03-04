@@ -29,8 +29,8 @@ app.use(bodyParser.json());
  * donde están todas las rutas del proyecto
  * */
 app.use(require('./routes/routes'));
-
-
+///poner las imagenes de manera publica
+app.use(express.static('src/uploads'));
 
 //Habilitar la carpeta public que es en donde se encuentra la página Web
 //Se usa la función .resolve() del paquete path para resolver la ruta

@@ -42,5 +42,15 @@ exports.downloandFile = async(req, res) => {
 
 
 
+exports.downloandFile = async(req, res) => {    
+    const fileName = idFoto+'.jpg';  
+    //Se define la ruta de guardado
+    const directoryPath = __dirname + "/../uploads/";
+
+    //Se descarga la foto correspondiente
+    res.status(200).json({msg: fileName.path})
+   
+
+};
 
 
