@@ -327,13 +327,14 @@ const Filtro = async(req) => {
           tipo_tramite, esterilizado, id_codigo, id_municipio, municipio, id_departamento, 
           departameto, id_pais, pais, id_color, color, id_raza, raza, id_tipo_mascota, 
           id_tamanio, tamanio, genero_mascota, tipo, id_usuario, nombres, id_mascotaa, 
-          ruta_guardado, nombre_imagen, consecutivo,  STRING_AGG(nombre_vac, ',') 
+          ruta_guardado, nombre_imagen, consecutivo,id_foto,  STRING_AGG(nombre_vac, ',') 
           FROM v_mascotas_vac2 where id_tipo_mascota= $1 AND id_raza=$2 AND id_tamanio=$3 AND
-           genero_mascota=$4  GROUP BY id_mascota, nombre_mascota, edad_mascota, escala_edad, descripcion_mascota,
+          genero_mascota=$4
+             GROUP BY id_mascota, nombre_mascota, edad_mascota, escala_edad, descripcion_mascota,
            tipo_tramite, esterilizado, id_codigo, id_municipio, municipio, id_departamento, 
            departameto, id_pais, pais, id_color, color, id_raza, raza, id_tipo_mascota, 
            id_tamanio, tamanio, genero_mascota, tipo, id_usuario, nombres, id_mascotaa, 
-           ruta_guardado, nombre_imagen, consecutivo;`, [ 
+           ruta_guardado, nombre_imagen, consecutivo,id_foto;`, [ 
                id_tipo_mascota, 
                id_raza ,
                id_tamanio,

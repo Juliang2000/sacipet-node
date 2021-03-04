@@ -1,7 +1,7 @@
 const obtenerMascota = require('../controllers/mascotas.controller');
 const obtenerNombreFoto= require('./fotos.controller')
 
-exports.downloandFile = async(req, res) => {    
+exports.downloandFile2 = async(req, res) => {    
     
     try {     
         //Se captura el parámetro id_mascota de la entrada req
@@ -43,9 +43,7 @@ exports.downloandFile = async(req, res) => {
 
 
 exports.downloandFile = async(req, res) => {    
-    const fileName = idFoto+'.jpg';  
-    //Se define la ruta de guardado
-    const directoryPath = __dirname + "/../uploads/";
+  
 
     //Se descarga la foto correspondiente
     res.status(200).json({msg: fileName.path})

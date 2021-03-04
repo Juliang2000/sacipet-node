@@ -8,6 +8,7 @@ const downloadController = require('../controllers/download.controller');
 // Descarga archivos de un directorio
 //=========================================================
 
-router.post("/files", downloadController.downloandFile)
+router.post("/files", downloadController.downloandFile2)
+//router.post("/files", downloadController.downloandFile)
 
 module.exports = { router };
