@@ -219,18 +219,18 @@ const obtenerTodas = async(req, res) => {
     try {
     
         let respuesta =
-            await pool.query(`    SELECT 
+            await pool.query(`SELECT 
             id_mascota, nombre_mascota, edad_mascota, escala_edad, descripcion_mascota,
           tipo_tramite, esterilizado, id_codigo, id_municipio, municipio, id_departamento, 
           departameto, id_pais, pais, id_color, color, id_raza, raza, id_tipo_mascota, 
-          id_tamanio, tamanio, genero_mascota, tipo, id_usuario, nombres, id_mascotaa, 
-          ruta_guardado, nombre_imagen, consecutivo,id_foto,  STRING_AGG(nombre_vac, ',') 
-          FROM v_mascotas_vac2 
+          id_tamanio, tamanio, genero_mascota, tipo, id_usuario, nombres, id_mascotaa, STRING_AGG(distinct id_foto, ',') fotos,  
+		  STRING_AGG(distinct nombre_vac, ',') vacunas
+        FROM v_mascotas_vac2 
              GROUP BY id_mascota, nombre_mascota, edad_mascota, escala_edad, descripcion_mascota,
            tipo_tramite, esterilizado, id_codigo, id_municipio, municipio, id_departamento, 
            departameto, id_pais, pais, id_color, color, id_raza, raza, id_tipo_mascota, 
-           id_tamanio, tamanio, genero_mascota, tipo, id_usuario, nombres, id_mascotaa, 
-           ruta_guardado, nombre_imagen, consecutivo,id_foto;`);
+           id_tamanio, tamanio, genero_mascota, tipo, id_usuario, nombres, id_mascotaa;
+		   `);
        /*  let re;
             for (var i = 0; i < respuesta.rows.length; i++) {
                 let k = i-1;
