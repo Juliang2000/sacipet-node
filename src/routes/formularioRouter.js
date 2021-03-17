@@ -246,7 +246,10 @@ router.post("/formulario", async(req, res) => {
         /**Se llama a la función que hace el registro y se obtiene la respuesta, 
          * ya sea el id que se acaba de registrar o 0,
          * y se guarda el número dentro de la constante "id_formulario"
+         * 
+         
          */
+        
         const id_formulario = await adops.LlenarFormulario(req);
 
         /**Si la función retorna 0, quiere decir
@@ -530,6 +533,225 @@ router.post("/filtro", async (req, res) => {
 
             });
         }
+
+    } catch (err) {
+        console.log(err);
+
+        res.status(500).json({
+            ok: false,
+            error: err.message
+        });
+
+    }
+});
+
+
+
+////////////////////////////////////////////////////DFDFFFFFFFFFFFFFFFFFFFFFF
+
+router.get("/obtenerformulario", async(req, res) => {
+
+    try {
+
+        const {
+            id_formulario,
+            
+    
+        } = req.body;
+
+        /**Se obtienen todas las mascotas registradas en la tabla
+         * "mascotas" y se guarda el resultado de la consulta dentro
+         * de la constante "mascotas"
+         */
+        
+        const mascotas = await adops.EncontrarFormulario( id_formulario);
+        
+        
+       // const mascotas2 = await route.downloadController.downloandFile(1,2);
+        /**Si la función retorna null, quiere decir
+         * que no se encontraron mascotas registradas
+         */
+        if (mascotas === null) {
+
+            res.status(400).json({
+                ok: false,
+                msg: `Aún no hay mascotas registradas`
+            });
+
+        } else {
+
+
+            res.json({
+                ok: true,
+                mascotas,
+              //  mascotas2
+            })
+        }
+
+
+    } catch (err) {
+        console.log(err);
+
+        res.status(500).json({
+            ok: false,
+            error: err.message
+        });
+    }
+
+});
+
+
+/////////////////////////////////////actualizar c
+
+router.post("/actualizarformulario", async(req, res) => {
+
+    try {
+        /**Se toman solo los campos necesarios 
+         * que vienen en el body de la petición
+         * 
+         */
+        const {
+            nombre_adoptante,
+            direccion_adoptante,
+            id_codigo,
+            localidad,
+            telefono,
+            email,
+            ocupacion,
+            estado_civil,
+            id_formulario
+    
+        } = req.body;
+
+        /**Se guardan dentro de un array,
+         * solo los campos obligatorios recibidos en el body
+         * de la petición 
+         */
+        const campos = [{
+                nombre: 'nombre_adoptante',
+                campo: nombre_adoptante
+            },
+            {
+                nombre: 'direccion_adoptante',
+                campo: direccion_adoptante
+            },
+            {
+                nombre: 'id_codigo',
+                campo: id_codigo
+            },
+            {
+                nombre: 'localidad',
+                campo: localidad
+            },
+            {
+                nombre: 'telefono',
+                campo: telefono
+            },
+            {
+                nombre: 'email',
+                campo: email
+            },
+            {
+                nombre: 'ocupacion',
+                campo: ocupacion
+            },
+            {
+                nombre: 'estado_civil',
+                campo: estado_civil
+            },
+            {
+                nombre: 'id_formulario',
+                campo: id_formulario
+            },
+
+
+            
+           
+        ];
+
+        /**Se busca en el array si alguno de los campos obligatorios 
+         * no fue recibido,
+         * en caso de que se encuentre algún campo vacio se guarda el 
+         * elemento encontrado dentro de la constante llamada "campoVacio"
+         */
+        const campoVacio = campos.find(x => !x.campo);
+
+        /**Si alguno de los campos NO fue enviado en la petición
+         * se le muestra al cliente el nombre del campo que falta
+         */
+        if (campoVacio) {
+
+            return res.status(400).json({
+                ok: false,
+                msg: `No ha ingresado el campo ${campoVacio.nombre}`
+            });
+        }
+
+        
+
+
+       
+
+
+        /**Se llama a la función que hace el registro y se obtiene la respuesta, 
+         * ya sea el id que se acaba de registrar o 0,
+         * y se guarda el número dentro de la constante "id_formulario"
+         * 
+         
+         */
+
+        const mascotas = await adops.EncontrarFormulario( id_formulario);
+
+        if (mascotas === null) {
+
+            res.status(400).json({
+                ok: false,
+                msg: `Aún no hay formulario registradas`
+            });
+
+        } else {
+
+
+            const id_formulario = await adops.ActualizarFormulario(req);
+
+            /**Si la función retorna 0, quiere decir
+             * que la mascota no se pudo crear
+             */
+            if (id_formulario === 0) {
+    
+                res.status(500).json({
+                    ok: false,
+                    msg: `Ocurrió un error al guardar el formulario`
+                });
+            }
+            
+            /**Sino quiere decir que la función retornó un
+             * números distinto de 0 y se registro la adopción
+             */
+            else {
+    
+                /**Se busca la mascota que se acaba de crear
+                 * dado el id_formulario que se acaba de obtener
+                 */
+               // const form = await adops.obtenerPorId(id_formulario);
+    
+                res.json({
+                    ok: true,
+                    mascotas,
+                    msg: `formulario guardada exitosamente`,
+                   // form
+                });
+            }
+
+
+    
+        }
+
+
+
+        ///////////////////
+        
+ 
 
     } catch (err) {
         console.log(err);
