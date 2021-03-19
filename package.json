@@ -32,7 +32,6 @@
     "pg": "^8.5.1",
     "pg-promise": "^10.8.1",
     "run": "^1.4.0",
-    "socket.io": "^3.1.2",
     "test": "^0.6.0"
   },
   "devDependencies": {},
