@@ -7,7 +7,7 @@ const path = require('path');
 ///////////////////////////
 
 const optionsCors = {
-    origin: 'http://localhost:5000'
+    origin: 'http://190.24.252.100:7020'
 }
 const cors = require('cors');
 
