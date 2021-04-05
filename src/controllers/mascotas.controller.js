@@ -804,7 +804,55 @@ const PublicacionMascota = async(publicado,id_mascota,id_usuario) => {
         return respuesta;
 
     } catch (err) {
-        throw new Error(`Archivo mascotas.controller.js -> obtenerPorColor()\n${err}`);
+        throw new Error(`Archivo mascotas.controller.js ${err}`);
+    }
+}
+
+
+
+
+
+
+
+
+
+const MascotasDesactivadas = async(req, res) => {
+    
+    try {
+    
+        let respuesta =
+            await pool.query(`SELECT 
+            id_mascota, nombre_mascota, edad_mascota, escala_edad, descripcion_mascota,
+          tipo_tramite, esterilizado, id_codigo, id_municipio, municipio, id_departamento, 
+          departameto, id_pais, pais, id_color, color, id_raza, raza, id_tipo_mascota, 
+          id_tamanio, tamanio, genero_mascota, tipo, id_usuario, nombres, id_mascotaa, STRING_AGG(distinct id_foto, ',') fotos,  
+		  STRING_AGG(distinct nombre_vac, ',') vacunas
+        FROM v_mascotas_desactivadas
+             GROUP BY id_mascota, nombre_mascota, edad_mascota, escala_edad, descripcion_mascota,
+           tipo_tramite, esterilizado, id_codigo, id_municipio, municipio, id_departamento, 
+           departameto, id_pais, pais, id_color, color, id_raza, raza, id_tipo_mascota, 
+           id_tamanio, tamanio, genero_mascota, tipo, id_usuario, nombres, id_mascotaa;
+		   `);
+      
+        if (JSON.stringify(respuesta.rows) === '[]') {
+
+           
+            respuesta = null;
+
+        }
+       
+        else {
+         
+        
+            
+       
+            respuesta = respuesta.rows;
+        }
+
+        return respuesta;
+
+    } catch (err) {
+        throw new Error(`Archivo mascotas.controller.js -> obtenerTodasdesactivadas()\n${err}`);
     }
 }
 
@@ -821,5 +869,6 @@ module.exports = {
     obtenerPorTipoMascotaYColor,
     obtenerPorTipoMascotaTamanioYColor,
     obtenerMascotaPorId,
-    PublicacionMascota
+    PublicacionMascota,
+    MascotasDesactivadas
 }

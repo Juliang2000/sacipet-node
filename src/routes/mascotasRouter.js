@@ -632,4 +632,51 @@ router.post("/PublicacionMascota", async(req, res) => {
 
 
 
+
+
+
+
+
+
+
+
+
+router.get("/MascotasDesactivadas", async(req, res) => {
+
+    try {
+
+    
+      
+        
+        const mascotas = await adops.MascotasDesactivadas();
+        
+        
+     
+        if (mascotas === null) {
+
+            res.status(400).json({
+                ok: false,
+                msg: `Aún no hay mascotas registradas`
+            });
+
+        } else {
+            res.json({
+                ok: true,
+                mascotas,
+              
+            })
+        }
+
+
+    } catch (err) {
+        console.log(err);
+
+        res.status(500).json({
+            ok: false,
+            error: err.message
+        });
+    }
+
+});
+
 module.exports = { router };
