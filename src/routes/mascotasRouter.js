@@ -641,17 +641,24 @@ router.post("/PublicacionMascota", async(req, res) => {
 
 
 
-router.get("/MascotasDesactivadas", async(req, res) => {
+router.post("/MascotasDesactivadas", async(req, res) => {
 
     try {
 
+        const {
+            id_usuario
     
+        } = req.body;
+
       
         
-        const mascotas = await adops.MascotasDesactivadas();
+        const mascotas = await adops.MascotasDesactivadas(id_usuario);
         
         
-     
+       // const mascotas2 = await route.downloadController.downloandFile(1,2);
+        /**Si la función retorna null, quiere decir
+         * que no se encontraron mascotas registradas
+         */
         if (mascotas === null) {
 
             res.status(400).json({
@@ -663,7 +670,7 @@ router.get("/MascotasDesactivadas", async(req, res) => {
             res.json({
                 ok: true,
                 mascotas,
-              
+              //  mascotas2
             })
         }
 
