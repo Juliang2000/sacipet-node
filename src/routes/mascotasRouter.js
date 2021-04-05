@@ -589,4 +589,47 @@ router.get("/buscarmascotas", async(req, res) => {
 
 });
 
+
+
+
+
+router.post("/PublicacionMascota", async(req, res) => {
+
+    try {
+
+        const {
+            publicado,
+            id_mascota,
+            id_usuario
+    
+        } = req.body;
+
+       
+        
+        const mascotas = await adops.PublicacionMascota( publicado,id_mascota,id_usuario);
+        
+        
+    
+        
+            res.json({
+                ok: true,
+                message:'mascota eliminada exitosamente'
+              
+            })
+        
+
+
+    } catch (err) {
+        console.log(err);
+
+        res.status(500).json({
+            ok: false,
+            error: err.message
+        });
+    }
+
+});
+
+
+
 module.exports = { router };

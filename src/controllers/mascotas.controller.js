@@ -28,6 +28,7 @@ const crear = async(req) => {
             descripcion_mascota,
             id_usuario,
             tipo_tramite,
+            publicado,
             //vacunas
             id_vacuna_Rabia ,
             id_vacuna_Rinotraqueítis,
@@ -53,8 +54,9 @@ const crear = async(req) => {
                 descripcion_mascota,
                 id_usuario,
                 tipo_tramite,
-                id_codigo) 
-                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11,$12) 
+                id_codigo,
+                publicado) 
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11,$12,'1') 
                 RETURNING id_mascota`, [
                 nombre_mascota,
                 edad_mascota,
@@ -67,7 +69,8 @@ const crear = async(req) => {
                 descripcion_mascota || null,
                 id_usuario,
                 tipo_tramite,
-                id_codigo
+                id_codigo,
+                
             ]);
 
         /**Si rowCount es igual a 1 quiere decir que el INSERT
@@ -774,6 +777,37 @@ const obtenerMascotaPorId = async (id) => {
     }
 }
 
+
+
+
+
+
+
+const PublicacionMascota = async(publicado,id_mascota,id_usuario) => {
+
+    try {
+
+        let respuesta =
+            await pool.query(`UPDATE t_mascotas SET publicado = $1 WHERE id_mascota = $2 and id_usuario= $3;`, [publicado,id_mascota,id_usuario]);
+
+      
+        if (JSON.stringify(respuesta.rows) === '[]') {
+
+            respuesta = null;
+
+        }
+   
+        else {
+            respuesta = mascota;
+        }
+
+        return respuesta;
+
+    } catch (err) {
+        throw new Error(`Archivo mascotas.controller.js -> obtenerPorColor()\n${err}`);
+    }
+}
+
 module.exports = {
     crear,
     obtenerPorId,
@@ -786,5 +820,6 @@ module.exports = {
     obtenerPorTamanioYColor,
     obtenerPorTipoMascotaYColor,
     obtenerPorTipoMascotaTamanioYColor,
-    obtenerMascotaPorId
+    obtenerMascotaPorId,
+    PublicacionMascota
 }
