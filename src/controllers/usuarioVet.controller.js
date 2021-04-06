@@ -177,6 +177,92 @@ const obtenerPorId = async (id) => {
 }
 
 
+
+
+
+
+
+
+
+const cambiarNombreUsuario = async (nombres,id_usuario) => {
+
+    try { 
+        let respuesta = await pool.query('UPDATE t_usuario SET nombres = $1 WHERE id = $2;', [nombres,id_usuario]);
+
+       
+        if (JSON.stringify(respuesta.rows) === '[]') {
+
+            respuesta = null;
+
+        }
+      
+        else {
+            respuesta = respuesta.rows[0];
+        }
+
+        return respuesta;
+
+    } catch (err) {
+        throw new Error(`Archivo usuarioVet.controller.js->obtenerPorId()\n${err}`);
+    }
+}
+
+
+
+
+const cambiarTelefonoUsuario = async (telefono,id_usuario) => {
+
+    try { 
+        let respuesta = await pool.query('UPDATE t_usuario SET telefono = $1 WHERE id = $2;', [telefono,id_usuario]);
+
+       
+        if (JSON.stringify(respuesta.rows) === '[]') {
+
+            respuesta = null;
+
+        }
+      
+        else {
+            respuesta = respuesta.rows[0];
+        }
+
+        return respuesta;
+
+    } catch (err) {
+        throw new Error(`Archivo usuarioVet.controller.js->obtenerPorId()\n${err}`);
+    }
+}
+
+
+
+
+
+
+const cambiarEmailUsuario = async (email,id_usuario) => {
+
+    try { 
+        let respuesta = await pool.query('UPDATE t_usuario SET correo = $1 WHERE id = $2;', [email,id_usuario]);
+
+       
+        if (JSON.stringify(respuesta.rows) === '[]') {
+
+            respuesta = null;
+
+        }
+      
+        else {
+            respuesta = respuesta.rows[0];
+        }
+
+        return respuesta;
+
+    } catch (err) {
+        throw new Error(`Archivo usuarioVet.controller.js->obtenerPorId()\n${err}`);
+    }
+}
+
+
+
 module.exports = {
 
     crear,
@@ -184,5 +270,8 @@ module.exports = {
     consultarUsuario,
     crearUsuarioRedesSociales,
     hashPassword,
-    obtenerPorId
+    obtenerPorId,
+    cambiarNombreUsuario,
+    cambiarTelefonoUsuario,
+    cambiarEmailUsuario
 }

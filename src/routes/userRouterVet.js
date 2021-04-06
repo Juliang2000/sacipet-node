@@ -164,4 +164,158 @@ router.post("/registro", async(req, res) => {
 });
 
 
+
+
+router.post("/Mostarusuario", async(req, res) => {
+
+    try {
+
+        const {
+            id_usuario
+    
+        } = req.body;
+
+      
+        
+        const user = await usuariocontroladorVet.obtenerPorId(id_usuario);
+        
+    
+        if (user === null) {
+
+            res.status(400).json({
+                ok: false,
+                msg: `Aún no hay user registrados`
+            });
+
+        } else {
+            res.json({
+                ok: true,
+                user,
+            
+            })
+        }
+
+
+    } catch (err) {
+        console.log(err);
+
+        res.status(500).json({
+            ok: false,
+            error: err.message
+        });
+    }
+
+});
+
+
+
+
+router.post("/CambiarNombre", async(req, res) => {
+
+    try {
+
+        const {
+            nombres,
+            id_usuario
+    
+        } = req.body;
+
+      
+        
+        const name = await usuariocontroladorVet.cambiarNombreUsuario(nombres,id_usuario);
+        
+      
+            res.json({
+                ok: true,
+                message:"nombre actualizado exitosamente",
+              
+            })
+        
+
+
+    } catch (err) {
+        console.log(err);
+
+        res.status(500).json({
+            ok: false,
+            error: err.message
+           
+        });
+    }
+
+});
+
+
+
+router.post("/CambiarTelefono", async(req, res) => {
+
+    try {
+
+        const {
+            telefono,
+            id_usuario
+    
+        } = req.body;
+
+      
+        
+        const name = await usuariocontroladorVet.cambiarTelefonoUsuario(telefono,id_usuario);
+        
+        res.json({
+            ok: true,
+            message:"telefono actualizado exitosamente",
+          
+        })
+        
+        
+
+
+    } catch (err) {
+        console.log(err);
+
+        res.status(500).json({
+            ok: false,
+            error: err.message
+        });
+    }
+
+});
+
+
+
+
+
+router.post("/CambiarEmail", async(req, res) => {
+
+    try {
+
+        const {
+            email,
+            id_usuario
+    
+        } = req.body;
+
+      
+        
+        const name = await usuariocontroladorVet.cambiarEmailUsuario(email,id_usuario);
+        
+        res.json({
+            ok: true,
+            message:"email actualizado exitosamente",
+          
+        })
+        
+        
+
+
+    } catch (err) {
+        console.log(err);
+
+        res.status(500).json({
+            ok: false,
+            error: err.message
+        });
+    }
+
+});
 module.exports = { router };
