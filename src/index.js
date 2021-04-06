@@ -31,6 +31,7 @@ app.use(bodyParser.json());
 app.use(require('./routes/routes'));
 ///poner las imagenes de manera publica
 app.use(express.static('src/uploads'));
+app.use(express.static('src/uploads2'));
 
 //Habilitar la carpeta public que es en donde se encuentra la página Web
 //Se usa la función .resolve() del paquete path para resolver la ruta
