@@ -825,13 +825,13 @@ const MascotasDesactivadas = async(id_usuario) => {
             id_mascota, nombre_mascota, edad_mascota, escala_edad, descripcion_mascota,
           tipo_tramite, esterilizado, id_codigo, id_municipio, municipio, id_departamento, 
           departameto, id_pais, pais, id_color, color, id_raza, raza, id_tipo_mascota, 
-          id_tamanio, tamanio, genero_mascota, tipo, id_usuario, nombres, id_mascotaa, STRING_AGG(distinct id_foto, ',') fotos,  
+          id_tamanio, tamanio, genero_mascota,publicado, tipo, id_usuario, nombres, id_mascotaa, STRING_AGG(distinct id_foto, ',') fotos,  
 		  STRING_AGG(distinct nombre_vac, ',') vacunas
         FROM v_mascotas_desactivadas where id_usuario = $1
              GROUP BY id_mascota, nombre_mascota, edad_mascota, escala_edad, descripcion_mascota,
            tipo_tramite, esterilizado, id_codigo, id_municipio, municipio, id_departamento, 
            departameto, id_pais, pais, id_color, color, id_raza, raza, id_tipo_mascota, 
-           id_tamanio, tamanio, genero_mascota, tipo, id_usuario, nombres, id_mascotaa;
+           id_tamanio, tamanio, genero_mascota, tipo, id_usuario, nombres, id_mascotaa,publicado;
 		   `,[id_usuario]);
       
         if (JSON.stringify(respuesta.rows) === '[]') {
