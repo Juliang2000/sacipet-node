@@ -216,13 +216,13 @@ router.post("/CambiarNombre", async(req, res) => {
 
         const {
             nombres,
-            id_usuario
+            id
     
         } = req.body;
 
       
         
-        const name = await usuariocontroladorVet.cambiarNombreUsuario(nombres,id_usuario);
+        const name = await usuariocontroladorVet.cambiarNombreUsuario(nombres,id);
         
       
             res.json({
@@ -253,13 +253,13 @@ router.post("/CambiarTelefono", async(req, res) => {
 
         const {
             telefono,
-            id_usuario
+            id
     
         } = req.body;
 
       
         
-        const name = await usuariocontroladorVet.cambiarTelefonoUsuario(telefono,id_usuario);
+        const name = await usuariocontroladorVet.cambiarTelefonoUsuario(telefono,id);
         
         res.json({
             ok: true,
@@ -290,14 +290,14 @@ router.post("/CambiarEmail", async(req, res) => {
     try {
 
         const {
-            email,
-            id_usuario
+            correo,
+            id
     
         } = req.body;
 
       
         
-        const name = await usuariocontroladorVet.cambiarEmailUsuario(email,id_usuario);
+        const name = await usuariocontroladorVet.cambiarEmailUsuario(correo,id);
         
         res.json({
             ok: true,
