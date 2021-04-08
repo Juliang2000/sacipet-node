@@ -263,6 +263,58 @@ const cambiarEmailUsuario = async (email,id_usuario) => {
 
 
 
+const cambiarContrasenaUsuario = async (password,id_usuario) => {
+
+    try { 
+        let respuesta = await pool.query('UPDATE t_usuario SET password = $1 WHERE id = $2;', [password,id_usuario]);
+
+       
+        if (JSON.stringify(respuesta.rows) === '[]') {
+
+            respuesta = null;
+
+        }
+      
+        else {
+            respuesta = respuesta.rows[0];
+        }
+
+        return respuesta;
+
+    } catch (err) {
+        throw new Error(`Archivo usuarioVet.controller.js->obtenerPorId()\n${err}`);
+    }
+}
+
+
+const obtenerPorId2 = async (id) => {
+
+    try {
+        let respuesta = await pool.query('SELECT * FROM t_usuario WHERE id = $1', [id]);
+
+        /**Para verificar que el resultado de la consulta no arroja ningún registro
+         * se convierte la respuesta en un JSONArray y se compara con []
+         */
+        if (JSON.stringify(respuesta.rows) === '[]') {
+
+            //Se le asigna null a la respuesta
+            respuesta = null;
+
+        }
+        /**En caso contrario quiere decir que si arrojó 1 registro
+         * por lo tanto se le asigna a la respuesta los valores de los atributos
+         * del registro encontrado que está en la primera posición del array */
+        else {
+            respuesta = respuesta.rows[0].password;
+        }
+
+        return respuesta;
+
+    } catch (err) {
+        throw new Error(`Archivo usuarioVet.controller.js->obtenerPorId()\n${err}`);
+    }
+}
+
 module.exports = {
 
     crear,
@@ -273,5 +325,7 @@ module.exports = {
     obtenerPorId,
     cambiarNombreUsuario,
     cambiarTelefonoUsuario,
-    cambiarEmailUsuario
+    cambiarEmailUsuario,
+    cambiarContrasenaUsuario,
+    obtenerPorId2 
 }

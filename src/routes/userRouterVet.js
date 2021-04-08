@@ -318,4 +318,77 @@ router.post("/CambiarEmail", async(req, res) => {
     }
 
 });
+
+
+
+
+router.post("/CambiarContrasena", async(req, res) => {
+
+    try {
+
+        const {
+            password,
+            id
+    
+        } = req.body;
+
+
+
+        
+if (password != null) { // se compara el hash
+
+ 
+  
+    const hashLogin = await usuariocontroladorVet.hashPassword(password)
+    
+        // compara el password
+    
+
+    
+
+        const name = await usuariocontroladorVet.cambiarContrasenaUsuario(hashLogin,id);
+    
+   
+        /**Si la función retorna null, quiere decir
+         * que no se encontraron vuelos registrados
+         */
+        if (name === null) {
+
+            res.status(400).json({
+                ok: false,
+                msg: `Aún no hay usuarios en esre mometo`
+            });
+
+        } else {
+            res.json({
+                ok: true,
+                name
+              
+            })
+        }
+}
+
+      
+        
+        
+        
+      
+        
+        
+
+
+    } catch (err) {
+        console.log(err);
+
+        res.status(500).json({
+            ok: false,
+            error: err.message
+        });
+    }
+
+});
+
+
+
+
 module.exports = { router };
