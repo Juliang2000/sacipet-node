@@ -348,20 +348,20 @@ if (password != null) { // se compara el hash
 
         const name = await usuariocontroladorVet.cambiarContrasenaUsuario(hashLogin,id);
     
-   
+   console.log(name)
         /**Si la función retorna null, quiere decir
          * que no se encontraron vuelos registrados
          */
         if (name === null) {
-
-            res.status(400).json({
-                ok: false,
-                msg: `clave cambiada`
-            });
+            res.json({
+                ok: true,
+                message:"contraseña actualizado exitosamente",
+              
+            })
 
         } else {
             res.json({
-                ok: true,
+                ok: false,
                 name
               
             })
