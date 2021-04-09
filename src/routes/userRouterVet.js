@@ -356,7 +356,7 @@ if (password != null) { // se compara el hash
 
             res.status(400).json({
                 ok: false,
-                msg: `Aún no hay usuarios en esre mometo`
+                msg: `clave cambiada`
             });
 
         } else {
