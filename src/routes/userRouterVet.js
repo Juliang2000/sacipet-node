@@ -366,13 +366,57 @@ if (password != null) { // se compara el hash
               
             })
         }
-}
+}    
+        
+    } catch (err) {
+        console.log(err);
+
+        res.status(500).json({
+            ok: false,
+            error: err.message
+        });
+    }
+
+});
+
+
+
+router.post("/CompararContra", async(req, res) => {
+
+    try {
+
+        const {
+            id,
+            password
+    
+        } = req.body;
 
       
         
+        const name = await usuariocontroladorVet.compararContraseña(id,password);
+
+        const hashLogin = await usuariocontroladorVet.hashPassword(password);
+
+        if(name=== hashLogin){
+
+
+
+
+
+            res.json({
+                ok: true,
+                message:"claves coinciden",
+              
+            })
+        } else {
+            res.json({
+                ok: false,
+                message:"claves no coinciden",
+              
+            })
+        }
         
-        
-      
+       
         
         
 
@@ -387,8 +431,4 @@ if (password != null) { // se compara el hash
     }
 
 });
-
-
-
-
 module.exports = { router };

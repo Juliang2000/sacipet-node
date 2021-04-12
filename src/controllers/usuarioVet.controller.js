@@ -315,6 +315,50 @@ const obtenerPorId2 = async (id) => {
     }
 }
 
+
+
+const compararContraseña = async (id,password) => {
+
+    try {
+
+        const passwordHash = await hashPassword(password)
+        let respuesta = await pool.query('SELECT * FROM t_usuario WHERE id = $1', [id]);
+
+        /**Para verificar que el resultado de la consulta no arroja ningún registro
+         * se convierte la respuesta en un JSONArray y se compara con []
+         */
+        if (JSON.stringify(respuesta.rows) === '[]') {
+
+            //Se le asigna null a la respuesta
+            respuesta = null;
+
+        }
+        /**En caso contrario quiere decir que si arrojó 1 registro
+         * por lo tanto se le asigna a la respuesta los valores de los atributos
+         * del registro encontrado que está en la primera posición del array */
+        else {
+
+            if(passwordHash === respuesta.rows[0].password ){
+
+                respuesta = respuesta.rows[0].password;
+            }else{
+                respuesta = null;
+            }
+
+
+
+            
+        }
+
+        return respuesta;
+
+    } catch (err) {
+        throw new Error(`Archivo usuarioVet.controller.js->obtenerPorId()\n${err}`);
+    }
+}
+
+
+
 module.exports = {
 
     crear,
@@ -327,5 +371,6 @@ module.exports = {
     cambiarTelefonoUsuario,
     cambiarEmailUsuario,
     cambiarContrasenaUsuario,
-    obtenerPorId2 
+    obtenerPorId2,
+    compararContraseña
 }
