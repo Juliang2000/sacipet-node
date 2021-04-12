@@ -94,15 +94,21 @@ exports.uploadFileUser = async(req,res)=>{
         if (usuarioExiste === null) {
             return res.status(400).json({
                 ok: false,
-                msg: `El id_mascota ingresado: ${id_usuario} no existe`
+                msg: `El id_usuario ingresado: ${id_usuario} no existe`
             });
         };    
-        //Se define la ruta de guardado
-        const rutaGuardado = __dirname + "/../uploads2/";
-        //Se obtiene el archivo a partir de la foto de entrada req
-        const file = req.files.photo;
-        //Se consulta las fotos que están asociadas a una mascota en particular
-        const Fotos = await fots.fotosPorIdusuario(id_usuario);
+
+        const fotoExiste = await user.compararfotouser(id_usuario);
+                //Se define la ruta de guardado
+                const rutaGuardado = __dirname + "/../uploads2/";
+                //Se obtiene el archivo a partir de la foto de entrada req
+                const file = req.files.photo;
+                //Se consulta las fotos que están asociadas a una mascota en particular
+                const Fotos = await fots.fotosPorIdusuario(id_usuario);
+       
+        if (fotoExiste === null) {
+
+
         //Se adjuntan fotos solo si en la base de datos hay menos de 5 archivos relacionados
         if(Fotos.length<5 || Fotos===0){
             //Se crea el registro en base de datos con la información de la foto correspondiente
@@ -125,7 +131,28 @@ exports.uploadFileUser = async(req,res)=>{
                 ok: false,
                 msg: "No es posible adjuntar mas fotos, se puede subir máximo 5"
             });
-        };    
+        }; 
+        
+        
+    }else{
+        
+        const actualizafoto = await user.actualizarfotouser(id_usuario, req.files.photo.name,rutaGuardado);
+       // console.log(actualizafoto)
+        
+        fs.mkdir(rutaGuardado,(error)=>{
+            //if(error)throw error;
+        });
+        //Adjuntar archivo en el directorio
+        file.mv(rutaGuardado+actualizafoto +'.jpg', function(err, result){    //C:/uploads2/
+            if(err) throw err;
+            res.send({
+                sucess:true,
+                message:'File Upload!'
+            });
+        }); 
+    }
+
+
     } catch (err) {
         res.status(500).json({
             ok: false,

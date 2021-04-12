@@ -359,6 +359,64 @@ const compararContraseña = async (id,password) => {
 
 
 
+
+
+
+const compararfotouser = async (id_usuario) => {
+
+    try {
+        let respuesta = await pool.query('SELECT * FROM public.t_fotos_user where id_usuario = $1', [id_usuario]);
+
+    
+        if (JSON.stringify(respuesta.rows) === '[]') {
+
+     
+            respuesta = null;
+
+        }
+       
+        else {
+            respuesta = respuesta.rows;
+        }
+
+        return respuesta;
+
+    } catch (err) {
+        throw new Error(`Archivo usuarioVet.controller.js->compararfotouser()\n${err}`);
+    }
+}
+
+
+
+
+
+const actualizarfotouser = async (id_usuario, nombre_imagen,ruta_guardado) => {
+
+    try {
+        let respuesta = await pool.query('UPDATE public.t_fotos_user SET  nombre_imagen= $2,consecutivo=1,ruta_guardado=$3 WHERE id_usuario= $1   RETURNING id;', [id_usuario, nombre_imagen,ruta_guardado]);
+
+    
+        if (JSON.stringify(respuesta.rows) === '[]') {
+
+     
+            respuesta = null;
+
+        }
+       
+        else {
+            
+            respuesta = respuesta.rows[0].id;
+        }
+        console.log(respuesta)
+        return respuesta;
+
+    } catch (err) {
+        throw new Error(`Archivo usuarioVet.controller.js->compararfotouser()\n${err}`);
+    }
+}
+
+
+
 module.exports = {
 
     crear,
@@ -372,5 +430,7 @@ module.exports = {
     cambiarEmailUsuario,
     cambiarContrasenaUsuario,
     obtenerPorId2,
-    compararContraseña
+    compararContraseña,
+    compararfotouser,
+    actualizarfotouser
 }

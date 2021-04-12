@@ -163,11 +163,11 @@ router.post("/fotosUsuario", async(req, res) => {
 
         /**Se verifica si el id_mascota
          * se encuentra registrado*/
-        const adopcionExiste = await user.obtenerPorId(id_usuario);
+        const usuarioExiste = await user.obtenerPorId(id_usuario);
 
         /**Si la función devuelve un valor igual a null
          * quiere decir que el id_mascota NO existe*/
-        if (adopcionExiste === null) {
+        if (usuarioExiste === null) {
 
             return res.status(400).json({
                 ok: false,
@@ -175,7 +175,11 @@ router.post("/fotosUsuario", async(req, res) => {
             });
         }
 
-        /**Se llama a la función que hace el registro y se obtiene la respuesta, 
+
+        const fotoExiste = await user.compararfotouser(id_usuario);
+
+        if (fotoExiste === null) {
+            /**Se llama a la función que hace el registro y se obtiene la respuesta, 
          * ya sea el id que se acaba de registrar o 0,
          * y se guarda dentro de la constante "id"
          */
@@ -187,7 +191,7 @@ router.post("/fotosUsuario", async(req, res) => {
         if (id === 0) {
             res.status(500).json({
                 ok: false,
-                msg: `Ocurrión un error al agregar la foto a la adopcion`
+                msg: `Ocurrión un error al agregar la foto del usuario`
             });
         } else {
 
@@ -200,6 +204,21 @@ router.post("/fotosUsuario", async(req, res) => {
                 foto
             });
         }
+
+           
+        }else{
+            const actualizafoto = await user.actualizarfotouser(id_usuario, nombre_imagen,ruta_guardado);
+            res.json({
+                ok: true,
+                msg: `Foto actualizada exitosamente`,
+                
+            });
+           
+
+        }
+        
+
+        
     } catch (err) {
         console.log(err);
 
