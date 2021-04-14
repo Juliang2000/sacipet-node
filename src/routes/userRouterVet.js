@@ -302,11 +302,11 @@ router.post("/CambiarEmail", async(req, res) => {
          */
         if (usuarioExiste !== null) {
 
-            return res.status(403).json({
+            res.json({
                 ok: false,
-                msg: `Ya existe una cuenta asociada a ese correo: ${correo}`
+                message: `Ya existe una cuenta asociada a ese correo: ${correo}`
             });
-        }
+        }else{
 
         
      
@@ -318,7 +318,7 @@ router.post("/CambiarEmail", async(req, res) => {
           
         })
         
-        
+    }
 
 
     } catch (err) {
