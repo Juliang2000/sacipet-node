@@ -295,8 +295,21 @@ router.post("/CambiarEmail", async(req, res) => {
     
         } = req.body;
 
-      
+        let usuarioExiste = await usuariocontroladorVet.consultarUsuario(correo);
         
+        /**Si la función retorna un valor diferente de null quiere decir
+         * que ya existe un usuario registrado con ese correo
+         */
+        if (usuarioExiste !== null) {
+
+            return res.status(403).json({
+                ok: false,
+                msg: `Ya existe una cuenta asociada a ese correo: ${correo}`
+            });
+        }
+
+        
+     
         const name = await usuariocontroladorVet.cambiarEmailUsuario(correo,id);
         
         res.json({

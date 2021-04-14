@@ -386,9 +386,55 @@ const compararfotouser = async (id_usuario) => {
     }
 }
 
+const compararfotmasco = async (id_mascota,consecutivo) => {
+
+    try {
+        let respuesta = await pool.query('SELECT * FROM public.t_fotos where id_mascota = $1 AND consecutivo=$2', [id_mascota,consecutivo]);
+
+    
+        if (JSON.stringify(respuesta.rows) === '[]') {
+
+     
+            respuesta = null;
+
+        }
+       
+        else {
+            respuesta = respuesta.rows;
+        }
+
+        return respuesta;
+
+    } catch (err) {
+        throw new Error(`Archivo usuarioVet.controller.js->compararfotmasco()\n${err}`);
+    }
+}
 
 
+const actualizarfotomascota = async (id_mascota,consecutivo, nombre_imagen,ruta_guardado) => {
+    
+    try {
+        let respuesta = await pool.query('UPDATE public.t_fotos SET ruta_guardado=$4, nombre_imagen=$3 WHERE id_mascota=$1 AND  consecutivo=$2  RETURNING id;', [id_mascota,consecutivo, nombre_imagen,ruta_guardado]);
 
+    
+        if (JSON.stringify(respuesta.rows) === '[]') {
+
+     
+            respuesta = null;
+
+        }
+       
+        else {
+            
+            respuesta = respuesta.rows[0].id;
+        }
+        console.log(respuesta)
+        return respuesta;
+
+    } catch (err) {
+        throw new Error(`Archivo usuarioVet.controller.js->compararfotouser()\n${err}`);
+    }
+}
 
 const actualizarfotouser = async (id_usuario, nombre_imagen,ruta_guardado) => {
 
@@ -415,7 +461,33 @@ const actualizarfotouser = async (id_usuario, nombre_imagen,ruta_guardado) => {
     }
 }
 
+const obtenerCorrepoPorId = async (id) => {
 
+    try {
+        let respuesta = await pool.query('SELECT * FROM t_usuario WHERE id = $1 ', [id]);
+
+        /**Para verificar que el resultado de la consulta no arroja ningún registro
+         * se convierte la respuesta en un JSONArray y se compara con []
+         */
+        if (JSON.stringify(respuesta.rows) === '[]') {
+
+            //Se le asigna null a la respuesta
+            respuesta = null;
+
+        }
+        /**En caso contrario quiere decir que si arrojó 1 registro
+         * por lo tanto se le asigna a la respuesta los valores de los atributos
+         * del registro encontrado que está en la primera posición del array */
+        else {
+            respuesta = respuesta.rows[0].correo;
+        }
+
+        return respuesta;
+
+    } catch (err) {
+        throw new Error(`Archivo usuarioVet.controller.js->obtenerCorrepoPorId()\n${err}`);
+    }
+}
 
 module.exports = {
 
@@ -432,5 +504,8 @@ module.exports = {
     obtenerPorId2,
     compararContraseña,
     compararfotouser,
-    actualizarfotouser
+    compararfotmasco,
+    actualizarfotomascota,
+    actualizarfotouser,
+    obtenerCorrepoPorId
 }
