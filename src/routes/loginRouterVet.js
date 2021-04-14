@@ -160,7 +160,9 @@ router.post("/login", async(req, res) => {
         // despues de pasar por los casos, se genera el token de la aplicacion
 
         const tokenGenerado = await tokenController.generarToken(dbUser)
-
+        const foto = await userController.obtenerPorIdfotouser( dbUser.id)
+         
+        
 
         console.log(`token generado: ${tokenGenerado}`)
         console.log(`Ingreso_exitoso con: ${origen_cuenta}`)
@@ -169,9 +171,10 @@ router.post("/login", async(req, res) => {
             ok: true,
             msg: `¡Autenticación exitosa!`,
             user: dbUser,
+            foto:foto,
             tokenGenerado
         });
-
+       
 
     } catch (err) {
         console.log(err);
