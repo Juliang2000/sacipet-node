@@ -175,7 +175,7 @@ router.post("/login", async(req, res) => {
             ok: true,
             msg: `¡Autenticación exitosa!`,
             user: dbUser,
-            fotos:foto,
+            foto:foto,
             
             tokenGenerado
         });
