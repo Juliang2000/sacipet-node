@@ -686,4 +686,103 @@ router.post("/MascotasDesactivadas", async(req, res) => {
 
 });
 
+
+
+
+router.post("/ActualizarMascota", async(req, res) => {
+
+    try {
+
+    
+
+        const {
+            id_mascota,
+            nombre_mascota,
+            edad_mascota,
+            escala_edad,
+            esterilizado,
+            id_raza,
+            id_tamanio,
+            id_color,
+            descripcion_mascota,
+            tipo_tramite,
+            id_codigo,
+            genero_mascota,
+           
+    
+        } = req.body;
+
+
+                /**Se guardan dentro de un array,
+         * solo los campos obligatorios recibidos en el body
+         * de la petición 
+         */
+        const campos = [{
+            nombre: 'id_mascota',
+            campo: id_mascota
+        }
+    ];
+
+    /**Se busca en el array si alguno de los campos obligatorios 
+     * no fue recibido,
+     * en caso de que se encuentre algún campo vacio se guarda el 
+     * elemento encontrado dentro de la constante llamada "campoVacio"
+     */
+    const campoVacio = campos.find(x => !x.campo);
+
+    /**Si alguno de los campos NO fue enviado en la petición
+     * se le muestra al cliente el nombre del campo que falta
+     */
+    if (campoVacio) {
+
+        return res.status(400).json({
+            ok: false,
+            msg: `No ha ingresado el campo ${campoVacio.nombre}`
+        });
+    }
+
+
+        
+
+       
+
+      
+        
+const mascotas = await adops.ActualizarMascotas( id_mascota,nombre_mascota,edad_mascota,escala_edad,esterilizado,id_raza,id_tamanio,id_color,descripcion_mascota,tipo_tramite,id_codigo,genero_mascota,);
+        
+  
+       if (mascotas === null) {
+        res.json({
+            ok: true,
+            message:'mascota actualizada exitosamente'
+          
+        })
+    
+    }
+    /**Sino quiere decir que se encontró 1 o más registros
+     * que se ajustaban a todos los parámetros de búsqueda
+     */
+    else {
+        res.status(400).json({
+            ok: false,
+            msg: `Aún no hay mascota en adopción`
+        });
+
+       
+    }
+        
+
+        
+
+
+    } catch (err) {
+        console.log(err);
+
+        res.status(500).json({
+            ok: false,
+            error: err.message
+        });
+    }
+
+});
 module.exports = { router };

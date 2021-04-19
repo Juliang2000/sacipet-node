@@ -1,5 +1,5 @@
 const pool = require('../database/dbConection');
-
+const fs = require('fs')
 /**Esta función hace un INSERT dentro de la tabla, fotos
  * dados los campos que vienen en el "req" de la petición
  * 
@@ -283,6 +283,37 @@ const obtenerIdFotoUsuario = async(id,consecutivo) => {
     }
 }
 
+const EliminarFotoUser= async(id_usuario) => {
+    
+    try {
+    
+        let respuesta =
+            await pool.query(`DELETE FROM public.t_fotos_user WHERE id_usuario= $1 RETURNING id`,[id_usuario]);
+      
+        if (JSON.stringify(respuesta.rows) === '[]') {
+
+           
+            respuesta = null;
+
+        }
+       
+        else {
+         
+        
+            
+       
+            respuesta = respuesta.rows[0].id;
+            
+        }
+
+        return respuesta;
+
+    } catch (err) {
+        throw new Error(`Archivo mascotas.controller.js -> obtenerTodasdesactivadas()\n${err}`);
+    }
+}
+
+
 
 module.exports = {
     crear,
@@ -293,7 +324,8 @@ module.exports = {
     crearfusuario,
     obtenerFotousuario,
     fotosPorIdusuario,
-    obtenerIdFotoUsuario
+    obtenerIdFotoUsuario,
+    EliminarFotoUser
 
 
 }

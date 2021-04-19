@@ -856,6 +856,44 @@ const MascotasDesactivadas = async(id_usuario) => {
     }
 }
 
+
+//actualizar mascotas
+
+
+
+const ActualizarMascotas= async(id_mascota,nombre_mascota,edad_mascota,escala_edad,esterilizado,id_raza,id_tamanio,id_color,descripcion_mascota,tipo_tramite,id_codigo,genero_mascota) => {
+    
+    try {
+    
+        let respuesta =
+            await pool.query(`UPDATE public.t_mascotas SET  nombre_mascota=$2, edad_mascota=$3, escala_edad=$4, esterilizado=$5, id_raza=$6, id_tamanio=$7, id_color=$8, descripcion_mascota=$9, tipo_tramite=$10, id_codigo=$11, genero_mascota=$12 WHERE id_mascota=$1;`
+            ,[id_mascota,nombre_mascota,edad_mascota,escala_edad,esterilizado,id_raza,id_tamanio,id_color,descripcion_mascota,tipo_tramite,id_codigo,genero_mascota]);
+      
+        if (JSON.stringify(respuesta.rows) === '[]') {
+
+           
+            respuesta = null;
+
+        }
+       
+        else {
+         
+        
+            
+       
+            respuesta = respuesta.rows;
+        }
+
+        return respuesta;
+
+    } catch (err) {
+        throw new Error(`Archivo mascotas.controller.js -> obtenerTodasdesactivadas()\n${err}`);
+    }
+}
+
+
+
+
 module.exports = {
     crear,
     obtenerPorId,
@@ -870,5 +908,6 @@ module.exports = {
     obtenerPorTipoMascotaTamanioYColor,
     obtenerMascotaPorId,
     PublicacionMascota,
-    MascotasDesactivadas
+    MascotasDesactivadas,
+    ActualizarMascotas
 }

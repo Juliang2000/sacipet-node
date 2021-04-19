@@ -166,12 +166,17 @@ router.post("/login", async(req, res) => {
 
         console.log(`token generado: ${tokenGenerado}`)
         console.log(`Ingreso_exitoso con: ${origen_cuenta}`)
+
+
+        let obj_unidos = Object.assign(dbUser, foto);
+        console.log(dbUser)
+
         return res.status(200).json({
 
             ok: true,
             msg: `¡Autenticación exitosa!`,
             user: dbUser,
-            foto:foto,
+            
             tokenGenerado
         });
        

@@ -2,6 +2,8 @@ const router = require("express").Router();
 const adops = require('../controllers/mascotas.controller');
 const fots = require('../controllers/fotos.controller');
 const user = require('../controllers/usuarioVet.controller');
+const fs = require('fs')
+
 
 //===========================================
 //Guarda registro en la tabla fotos
@@ -226,9 +228,68 @@ router.post("/fotosUsuario", async(req, res) => {
             ok: false,
             error: err.message
         });
-
     }
 
 });
+
+
+
+
+
+
+
+
+
+router.post("/EliminarFotoUser", async(req, res) => {
+
+    try {
+
+        const {
+            id_usuario
+    
+        } = req.body;
+
+      
+        
+        const mascotas = await fots.EliminarFotoUser(id_usuario);
+
+        
+        
+        if (mascotas === null) {
+
+            res.status(400).json({
+                ok: false,
+                msg: `Aún no hay mascotas registradas`
+            });
+
+        } else {
+            try {
+                fs.unlinkSync('src/uploads2/'+mascotas+'.jpg')
+                console.log('Imagen eliminada de upload2')
+              } catch(err) {
+                console.error('Se produjo un error al eliminar el archivo:', err)
+              }
+
+            res.json({
+                ok: true,
+                mascotas,
+              //  mascotas2
+            })
+        }
+
+
+    } catch (err) {
+        console.log(err);
+
+        res.status(500).json({
+            ok: false,
+            error: err.message
+        });
+    }
+
+});
+
+
+
 
 module.exports = { router }
