@@ -24,7 +24,7 @@ const LlenarFormulario = async (req) => {
             id_codigo,
             localidad,
             telefono,
-            email,
+            correo,
             ocupacion,
             estado_civil,
 
@@ -153,7 +153,7 @@ const LlenarFormulario = async (req) => {
                 id_codigo,
                 localidad,
                 telefono,
-                email,
+                correo,
                 ocupacion,
                 estado_civil,
                 pregunta_mascota_1,
