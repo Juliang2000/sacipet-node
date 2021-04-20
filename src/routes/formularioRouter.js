@@ -20,7 +20,7 @@ router.post("/formulario", async (req, res) => {
             id_codigo,
             localidad,
             telefono,
-            email,
+            correo,
             ocupacion,
             estado_civil,
             pregunta_mascota_1,
@@ -82,8 +82,8 @@ router.post("/formulario", async (req, res) => {
             campo: telefono
         },
         {
-            nombre: 'email',
-            campo: email
+            nombre: 'correo',
+            campo: correo
         },
         {
             nombre: 'ocupacion',
