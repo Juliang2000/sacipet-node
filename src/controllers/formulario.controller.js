@@ -2603,7 +2603,7 @@ const ActualizarFormulario = async (req) => {
 const obtenerPorIdFormulario = async (id) => {
     try {
         let respuesta =
-            await pool.query('SELECT * FROM t_formulario   INNER JOIN t_mascotas_formulario ON t_formulario.id_formulario = t_mascotas_formulario.id_formulario  where t_formulario.id= $1', [id]);
+            await pool.query('SELECT * FROM t_formulario    where id= $1', [id]);
 
         /**Para verificar que el resultado de la consulta no arroja ningún registro
          * se convierte la respuesta en un JSONArray y se compara con []
