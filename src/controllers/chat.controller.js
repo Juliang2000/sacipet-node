@@ -31,7 +31,7 @@ const EnviarMensajes = async (primer_usuario, segundo_usuario, fecha_envio, vist
 const ObtenerMensaje = async (primer_usuario, segundo_usuario) => {
     try {
         let respuesta =
-            await pool.query("SELECT * FROM chat where primer_usuario = $1 OR segundo_usuario = $2 order by fecha_envio;", [primer_usuario, segundo_usuario]);
+            await pool.query("SELECT fecha_envio, visto, mensaje FROM chat where primer_usuario = $1 OR segundo_usuario = $2 order by fecha_envio;", [primer_usuario, segundo_usuario]);
 
 
         if (JSON.stringify(respuesta.rows) === '[]') {
