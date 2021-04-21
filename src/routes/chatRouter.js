@@ -61,11 +61,11 @@ router.post("/mensaje", async (req, res) => {
 
 
         const form = await chat.EnviarMensajes(primer_usuario,segundo_usuario,horatotal,visto,mensaje);
-
+        const form2 = await chat.ObtenerMensaje(primer_usuario)
         res.json({
             ok: true,
             msg: `formulario encontrado exitosamente`,
-            form
+            form2
         });
     }
 
