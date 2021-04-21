@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const adops = require('../controllers/chat.controller');
+const chat = require('../controllers/chat.controller');
 
 
 
@@ -10,20 +10,32 @@ const adops = require('../controllers/chat.controller');
 
 
 
-router.post("/crearchat", async (req, res) => {
+router.post("/mensaje", async (req, res) => {
 
     try {
 
         const {
 
-            id_usuario
+            primer_usuario, 
+            segundo_usuario, 
+     
+            mensaje
 
         } = req.body;
 
         const campos = [
             {
-                nombre: 'id_usuario',
-                campo: id_usuario
+                nombre: 'primer_usuario',
+                campo: primer_usuario
+            },
+            {
+                nombre: 'segundo_usuario',
+                campo: segundo_usuario
+            },
+         
+            {
+                nombre: 'mensaje',
+                campo: mensaje
             },
         ];
 
@@ -39,10 +51,16 @@ router.post("/crearchat", async (req, res) => {
             });
         }
 
+        const date = new Date();
+        let horas = date.getHours();
+        let minutos = date.getMinutes()
+        let segundos = date.getSeconds();
+
+        horatotal = horas + ":" + minutos+ ":" +segundos
+        visto=0
 
 
-
-        const form = await adops.MacotasRegistradas(id_usuario);
+        const form = await chat.EnviarMensajes(primer_usuario,segundo_usuario,horatotal,visto,mensaje);
 
         res.json({
             ok: true,

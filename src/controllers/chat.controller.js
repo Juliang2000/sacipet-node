@@ -2,10 +2,10 @@ const pool = require('../database/dbConection');
 const { Router } = require('express');
 const router = Router();
 
-const EnviarMensajes = async (id_usuario) => {
+const EnviarMensajes = async (primer_usuario, segundo_usuario, fecha_envio, visto, mensaje) => {
     try {
         let respuesta =
-            await pool.query("SELECT id_mascota, nombre_mascota, edad_mascota, escala_edad, esterilizado, id_raza, id_tamanio, id_color, descripcion_mascota, id_usuario, tipo_tramite, id_codigo, genero_mascota, publicado, id_formulario, solicitud_adopcion, id, nombres, telefono, correo FROM public.v_formulario where id_usuario = $1", [id_usuario]);
+            await pool.query("INSERT INTO public.chat(primer_usuario, segundo_usuario, fecha_envio, visto, mensaje) VALUES ($1, $2, $3, $4, $5);", [primer_usuario, segundo_usuario, fecha_envio, visto, mensaje]);
 
 
         if (JSON.stringify(respuesta.rows) === '[]') {
@@ -30,5 +30,5 @@ const EnviarMensajes = async (id_usuario) => {
 
 
 module.exports = {
-    
+    EnviarMensajes
 }
