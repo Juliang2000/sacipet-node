@@ -133,7 +133,7 @@ router.post("/formulario", async (req, res) => {
              * dado el id_formulario que se acaba de obtener
              */
             // const form = await adops.obtenerPorId(id_formulario);
-            const form = await adops.obtenerPorIdFormulario(id);
+            const form = await adops.obtenerPorIdFormularioEspecifico(id,id_formulario);
 
             res.json({
                 ok: true,

@@ -79,4 +79,57 @@ router.post("/mensaje", async (req, res) => {
 
     }
 });
+
+
+
+
+
+
+router.post("/obtenerchat", async (req, res) => {
+
+    try {
+
+        const {usuario} = req.body;
+
+        const campos = [
+            {
+                nombre: 'usuario',
+                campo: usuario
+            }
+        ];
+
+    
+        const campoVacio = campos.find(x => !x.campo);
+
+
+        if (campoVacio) {
+
+            return res.status(400).json({
+                ok: false,
+                msg: `No ha ingresado el campo ${campoVacio.nombre}`
+            });
+        }
+
+       
+
+
+        const form = await chat.ObtenerMensaje( usuario, usuario);
+
+        res.json({
+            ok: true,
+            msg: `chat encontrado exitosamente`,
+            form
+        });
+    }
+
+    catch (err) {
+        console.log(err);
+
+        res.status(500).json({
+            ok: false,
+            error: err.message
+        });
+
+    }
+});
 module.exports = { router };
