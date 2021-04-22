@@ -309,7 +309,7 @@ const EliminarFotoUser= async(id_usuario) => {
         return respuesta;
 
     } catch (err) {
-        throw new Error(`Archivo mascotas.controller.js -> obtenerTodasdesactivadas()\n${err}`);
+        throw new Error(`Archivo mascotas.controller.js -> EliminarFotoUser()\n${err}`);
     }
 }
 

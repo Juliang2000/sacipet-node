@@ -2606,7 +2606,7 @@ const obtenermascotasporusuario = async (id_usuario) => {
 const MacotasRegistradas = async (id_usuario) => {
     try {
         let respuesta =
-            await pool.query("SELECT id_mascota, nombre_mascota, edad_mascota, escala_edad, esterilizado, id_raza, id_tamanio, id_color, descripcion_mascota, id_usuario, tipo_tramite, id_codigo, genero_mascota, publicado, id_formulario, solicitud_adopcion, id, nombres, telefono, correo FROM public.v_formulario where id_usuario = $1", [id_usuario]);
+            await pool.query("SELECT * FROM public.v_formulario where id_usuario = $1", [id_usuario]);
 
 
         if (JSON.stringify(respuesta.rows) === '[]') {
@@ -2637,7 +2637,7 @@ const MacotasRegistradas = async (id_usuario) => {
 const MacotasRegistradasespecifica = async (id_usuario,id_formulario,id_mascota) => {
     try {
         let respuesta =
-            await pool.query("SELECT id_mascota, nombre_mascota, edad_mascota, escala_edad, esterilizado, id_raza, id_tamanio, id_color, descripcion_mascota, id_usuario, tipo_tramite, id_codigo, genero_mascota, publicado, id_formulario, solicitud_adopcion, id, nombres, telefono, correo FROM public.v_formulario where id_usuario = $1 AND id_formulario = $2 AND id_mascota=$3", [id_usuario,id_formulario,id_mascota]);
+            await pool.query("SELECT * FROM public.v_formulario where id_usuario = $1 AND id_formulario = $2 AND id_mascota=$3", [id_usuario,id_formulario,id_mascota]);
 
 
         if (JSON.stringify(respuesta.rows) === '[]') {

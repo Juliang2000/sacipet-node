@@ -35,7 +35,10 @@ const crear = async(req) => {
             id_vacuna_Parvovirus,
             id_vacuna_Moquillo,
             //ubicacion geograficas
-            id_codigo
+            id_codigo,
+            telefono1, 
+            telefono2, 
+            correo
         } = req.body;
 
         /**En caso de que los campos "id_tamanio" o "descripcion_mascota"
@@ -55,8 +58,11 @@ const crear = async(req) => {
                 id_usuario,
                 tipo_tramite,
                 id_codigo,
-                publicado) 
-                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11,$12,'1') 
+                publicado,
+                telefono1, 
+                telefono2, 
+                correo) 
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11,$12,'1',$13,$14,$15) 
                 RETURNING id_mascota`, [
                 nombre_mascota,
                 edad_mascota,
@@ -70,6 +76,9 @@ const crear = async(req) => {
                 id_usuario,
                 tipo_tramite,
                 id_codigo,
+                telefono1 || null, 
+                telefono2 || null, 
+                correo || null
                 
             ]);
 
@@ -227,12 +236,12 @@ const obtenerTodas = async(req, res) => {
           tipo_tramite, esterilizado, id_codigo, id_municipio, municipio, id_departamento, 
           departameto, id_pais, pais, id_color, color, id_raza, raza, id_tipo_mascota, 
           id_tamanio, tamanio, genero_mascota, tipo, id_usuario, nombres, id_mascotaa, STRING_AGG(distinct id_foto, ',') fotos,  
-		  STRING_AGG(distinct nombre_vac, ',') vacunas
+		  STRING_AGG(distinct nombre_vac, ',') vacunas,telefono1,telefono2,correo
         FROM v_mascotas_vac2 
              GROUP BY id_mascota, nombre_mascota, edad_mascota, escala_edad, descripcion_mascota,
            tipo_tramite, esterilizado, id_codigo, id_municipio, municipio, id_departamento, 
            departameto, id_pais, pais, id_color, color, id_raza, raza, id_tipo_mascota, 
-           id_tamanio, tamanio, genero_mascota, tipo, id_usuario, nombres, id_mascotaa;
+           id_tamanio, tamanio, genero_mascota, tipo, id_usuario, nombres, id_mascotaa,telefono1,telefono2,correo;
 		   `);
        /*  let re;
             for (var i = 0; i < respuesta.rows.length; i++) {
@@ -826,12 +835,12 @@ const MascotasDesactivadas = async(id_usuario) => {
           tipo_tramite, esterilizado, id_codigo, id_municipio, municipio, id_unde, 
           departameto, id_pais, pais, id_color, color, id_raza, raza, id_tipo_mascota, 
           id_tamanio, tamanio, genero_mascota,publicado, tipo, id_usuario, nombres, id_mascotaa, STRING_AGG(distinct id_foto, ',') fotos,  
-		  STRING_AGG(distinct nombre_vac, ',') vacunas
+		  STRING_AGG(distinct nombre_vac, ',') vacunas ,telefono1,telefono2,correo
         FROM v_mascotas_desactivadas where id_usuario = $1
              GROUP BY id_mascota, nombre_mascota, edad_mascota, escala_edad, descripcion_mascota,
            tipo_tramite, esterilizado, id_codigo, id_municipio, municipio, id_unde, 
            departameto, id_pais, pais, id_color, color, id_raza, raza, id_tipo_mascota, 
-           id_tamanio, tamanio, genero_mascota, tipo, id_usuario, nombres, id_mascotaa,publicado;
+           id_tamanio, tamanio, genero_mascota, tipo, id_usuario, nombres, id_mascotaa,publicado,telefono1,telefono2,correo;
 		   `,[id_usuario]);
       
         if (JSON.stringify(respuesta.rows) === '[]') {
@@ -852,7 +861,7 @@ const MascotasDesactivadas = async(id_usuario) => {
         return respuesta;
 
     } catch (err) {
-        throw new Error(`Archivo mascotas.controller.js -> obtenerTodasdesactivadas()\n${err}`);
+        throw new Error(`Archivo mascotas.controller.js -> MascotasDesactivadas()\n${err}`);
     }
 }
 
@@ -861,13 +870,13 @@ const MascotasDesactivadas = async(id_usuario) => {
 
 
 
-const ActualizarMascotas= async(id_mascota,nombre_mascota,edad_mascota,escala_edad,esterilizado,id_raza,id_tamanio,id_color,descripcion_mascota,tipo_tramite,id_codigo,genero_mascota) => {
+const ActualizarMascotas= async(id_mascota,nombre_mascota,edad_mascota,escala_edad,esterilizado,id_raza,id_tamanio,id_color,descripcion_mascota,tipo_tramite,id_codigo,genero_mascota,telefono1, telefono2, correo) => {
     
     try {
     
         let respuesta =
-            await pool.query(`UPDATE public.t_mascotas SET  nombre_mascota=$2, edad_mascota=$3, escala_edad=$4, esterilizado=$5, id_raza=$6, id_tamanio=$7, id_color=$8, descripcion_mascota=$9, tipo_tramite=$10, id_codigo=$11, genero_mascota=$12 WHERE id_mascota=$1;`
-            ,[id_mascota,nombre_mascota,edad_mascota,escala_edad,esterilizado,id_raza,id_tamanio,id_color,descripcion_mascota,tipo_tramite,id_codigo,genero_mascota]);
+            await pool.query(`UPDATE public.t_mascotas SET  nombre_mascota=$2, edad_mascota=$3, escala_edad=$4, esterilizado=$5, id_raza=$6, id_tamanio=$7, id_color=$8, descripcion_mascota=$9, tipo_tramite=$10, id_codigo=$11, genero_mascota=$12,telefono1=$13, telefono2=$14, correo=$15 WHERE id_mascota=$1;`
+            ,[id_mascota,nombre_mascota,edad_mascota,escala_edad,esterilizado,id_raza,id_tamanio,id_color,descripcion_mascota,tipo_tramite,id_codigo,genero_mascota,telefono1, telefono2, correo]);
       
         if (JSON.stringify(respuesta.rows) === '[]') {
 
@@ -887,7 +896,7 @@ const ActualizarMascotas= async(id_mascota,nombre_mascota,edad_mascota,escala_ed
         return respuesta;
 
     } catch (err) {
-        throw new Error(`Archivo mascotas.controller.js -> obtenerTodasdesactivadas()\n${err}`);
+        throw new Error(`Archivo mascotas.controller.js -> ActualizarMascotas()\n${err}`);
     }
 }
 

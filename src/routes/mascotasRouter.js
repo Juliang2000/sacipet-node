@@ -36,7 +36,10 @@ router.post("/mascotas", async(req, res) => {
             descripcion_mascota,
             id_usuario,
             tipo_tramite,
-            id_codigo
+            id_codigo,
+            telefono1, 
+            telefono2, 
+            correo
     
         } = req.body;
 
@@ -87,7 +90,9 @@ router.post("/mascotas", async(req, res) => {
             {
                 nombre: 'id_codigo',
                 campo: id_codigo
-            }
+            }, 
+            
+       
         ];
 
         /**Se busca en el array si alguno de los campos obligatorios 
@@ -708,6 +713,9 @@ router.post("/ActualizarMascota", async(req, res) => {
             tipo_tramite,
             id_codigo,
             genero_mascota,
+            telefono1, 
+            telefono2, 
+            correo
            
     
         } = req.body;
@@ -748,7 +756,7 @@ router.post("/ActualizarMascota", async(req, res) => {
 
       
         
-const mascotas = await adops.ActualizarMascotas( id_mascota,nombre_mascota,edad_mascota,escala_edad,esterilizado,id_raza,id_tamanio,id_color,descripcion_mascota,tipo_tramite,id_codigo,genero_mascota,);
+const mascotas = await adops.ActualizarMascotas( id_mascota,nombre_mascota,edad_mascota,escala_edad,esterilizado,id_raza,id_tamanio,id_color,descripcion_mascota,tipo_tramite,id_codigo,genero_mascota,telefono1, telefono2, correo);
         
   
        if (mascotas === null) {
