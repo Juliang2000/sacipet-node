@@ -185,15 +185,13 @@ router.post("/pregunta", async (req, res) => {
         }
 
         const date = new Date();
-        let horas = date.getHours();
-        let minutos = date.getMinutes()
-        let segundos = date.getSeconds();
+        let fecha = date.toLocaleDateString()
 
-        horatotal = horas + ":" + minutos+ ":" +segundos
+       
         visto=0
 
         
-        const form = await chat.EnviarPregunta(primer_usuario,segundo_usuario,horatotal,mensaje,id_mascota);
+        const form = await chat.EnviarPregunta(primer_usuario,segundo_usuario,fecha,mensaje,id_mascota);
        // const form2 = await chat.ObtenerMensaje(primer_usuario)
         res.json({
             ok: true,

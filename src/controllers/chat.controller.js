@@ -31,7 +31,7 @@ const EnviarMensajes = async (primer_usuario, segundo_usuario, fecha_envio, vist
 const ObtenerMensaje = async (primer_usuario, segundo_usuario) => {
     try {
         let respuesta =
-            await pool.query("SELECT fecha_envio, visto, mensaje FROM chat where primer_usuario = $1 OR segundo_usuario = $2 order by fecha_envio;", [primer_usuario, segundo_usuario]);
+            await pool.query("SELECT fecha_envio, visto, mensaje FROM chat where primer_usuario = $1 OR segundo_usuario = $2 order by fecha_envio,id;", [primer_usuario, segundo_usuario]);
 
 
         if (JSON.stringify(respuesta.rows) === '[]') {
@@ -112,7 +112,7 @@ const EnviarRespuesta = async (respuesta,primer_usuario, segundo_usuario, id_mas
 const ObtenerPreguntasRespuestas = async (primer_usuario, id_mascota) => {
     try {
         let respuestaS = 
-            await pool.query("SELECT  fecha_envio, mensaje, respuesta FROM public.t_preguntas where primer_usuario = $1 AND id_mascota=$2 ORDER BY fecha_envio;", [primer_usuario, id_mascota]);
+            await pool.query("SELECT  fecha_envio, mensaje, respuesta FROM public.t_preguntas where primer_usuario = $1 AND id_mascota=$2 ORDER BY fecha_envio,id;", [primer_usuario, id_mascota]);
 
 
         if (JSON.stringify(respuestaS.rows) === '[]') {
