@@ -55,7 +55,88 @@ const ObtenerMensaje = async (primer_usuario, segundo_usuario) => {
 
 
 
+
+const EnviarPregunta = async (primer_usuario, segundo_usuario, fecha_envio, mensaje,id_mascota) => {
+    try {
+        let respuesta =
+            await pool.query("INSERT INTO public.t_preguntas(primer_usuario, segundo_usuario, fecha_envio, mensaje,id_mascota) VALUES ($1, $2, $3, $4,$5);", [primer_usuario, segundo_usuario, fecha_envio, mensaje,id_mascota]);
+
+
+        if (JSON.stringify(respuesta.rows) === '[]') {
+
+
+            respuesta = null;
+
+        }
+
+        else {
+            respuesta = respuesta.rows;
+        }
+
+        return respuesta;
+
+    } catch (err) {
+        throw new Error(`${err}`);
+    }
+}
+
+
+
+const EnviarRespuesta = async (respuesta,primer_usuario, segundo_usuario, id_mascota) => {
+    try {
+        let respuestaS =
+            await pool.query("UPDATE public.t_preguntas SET respuesta=$1 WHERE primer_usuario=$2 AND segundo_usuario=$3 AND id_mascota=$4;", [respuesta,primer_usuario, segundo_usuario, id_mascota]);
+
+
+        if (JSON.stringify(respuestaS.rows) === '[]') {
+
+
+            respuestaS = null;
+
+        }
+
+        else {
+            respuestaS = respuesta.rows;
+        }
+
+        return respuestaS;
+
+    } catch (err) {
+        throw new Error(`${err}`);
+    }
+}
+
+
+
+
+const ObtenerPreguntasRespuestas = async (primer_usuario, id_mascota) => {
+    try {
+        let respuestaS = 
+            await pool.query("SELECT  fecha_envio, mensaje, respuesta FROM public.t_preguntas where primer_usuario = $1 AND id_mascota=$2 ORDER BY fecha_envio;", [primer_usuario, id_mascota]);
+
+
+        if (JSON.stringify(respuestaS.rows) === '[]') {
+
+
+            respuestaS = null;
+
+        }
+
+        else {
+            respuestaS = respuestaS.rows;
+        }
+
+        return respuestaS;
+
+    } catch (err) {
+        throw new Error(`${err}`);
+    }
+}
+
 module.exports = {
     EnviarMensajes,
-    ObtenerMensaje
+    ObtenerMensaje,
+    EnviarPregunta,
+    EnviarRespuesta,
+    ObtenerPreguntasRespuestas
 }
