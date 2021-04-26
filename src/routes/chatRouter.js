@@ -222,9 +222,8 @@ router.post("/respuesta", async (req, res) => {
         const {
 
             respuesta,
-            primer_usuario,
-            segundo_usuario, 
-            id_mascota
+            id
+           
 
         } = req.body;
 
@@ -234,17 +233,8 @@ router.post("/respuesta", async (req, res) => {
                 campo: respuesta
             },
             {
-                nombre: 'primer_usuario',
-                campo: primer_usuario
-            },
-            {
-                nombre: 'segundo_usuario',
-                campo: segundo_usuario
-            },
-         
-            {
-                nombre: 'id_mascota',
-                campo: id_mascota
+                nombre: 'id',
+                campo: id
             }
         ];
 
@@ -262,7 +252,7 @@ router.post("/respuesta", async (req, res) => {
 
 
         
-        const form = await chat.EnviarRespuesta( respuesta,primer_usuario,segundo_usuario, id_mascota);
+        const form = await chat.EnviarRespuesta( respuesta,id);
        // const form2 = await chat.ObtenerMensaje(primer_usuario)
         res.json({
             ok: true,

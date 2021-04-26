@@ -59,7 +59,7 @@ const ObtenerMensaje = async (primer_usuario, segundo_usuario) => {
 const EnviarPregunta = async (primer_usuario, segundo_usuario, fecha_envio, mensaje,id_mascota) => {
     try {
         let respuesta =
-            await pool.query("INSERT INTO public.t_preguntas(primer_usuario, segundo_usuario, fecha_envio, mensaje,id_mascota) VALUES ($1, $2, $3, $4,$5);", [primer_usuario, segundo_usuario, fecha_envio, mensaje,id_mascota]);
+            await pool.query("INSERT INTO public.t_preguntas(primer_usuario, segundo_usuario, fecha_envio, mensaje,id_mascota) VALUES ($1, $2, $3, $4,$5) RETURNING id;", [primer_usuario, segundo_usuario, fecha_envio, mensaje,id_mascota]);
 
 
         if (JSON.stringify(respuesta.rows) === '[]') {
@@ -82,10 +82,10 @@ const EnviarPregunta = async (primer_usuario, segundo_usuario, fecha_envio, mens
 
 
 
-const EnviarRespuesta = async (respuesta,primer_usuario, segundo_usuario, id_mascota) => {
+const EnviarRespuesta = async (respuesta,id) => {
     try {
         let respuestaS =
-            await pool.query("UPDATE public.t_preguntas SET respuesta=$1 WHERE primer_usuario=$2 AND segundo_usuario=$3 AND id_mascota=$4;", [respuesta,primer_usuario, segundo_usuario, id_mascota]);
+            await pool.query("UPDATE public.t_preguntas SET respuesta=$1 WHERE id=$2;", [respuesta,id]);
 
 
         if (JSON.stringify(respuestaS.rows) === '[]') {
