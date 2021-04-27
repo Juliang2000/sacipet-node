@@ -2657,6 +2657,38 @@ const MacotasRegistradasespecifica = async (id_usuario,id_formulario,id_mascota)
         throw new Error(`${err}`);
     }
 }
+
+
+
+
+
+
+
+
+
+const solicitudes= async (id) => {
+    try {
+        let respuesta =
+            await pool.query("SELECT id_mascota, nombre_mascota, edad_mascota, escala_edad, esterilizado, id_raza, id_tamanio, id_color, descripcion_mascota, id_usuario, tipo_tramite, id_codigo, genero_mascota, publicado, telefono1, telefono2, correo, id_formulario, solicitud_adopcion, id, nombre_adoptante, direccion_adoptante, ciudad, localidad, telefono, email, ocupacion, estado_civil, pregunta_1, pregunta_2, pregunta_3, pregunta_4, pregunta_5, pregunta_6, terminos, nombres, telefono_user, correo_user FROM public.v_solicitudes  where id=$1;", [id]);
+
+
+        if (JSON.stringify(respuesta.rows) === '[]') {
+
+
+            respuesta = null;
+
+        }
+
+        else {
+            respuesta = respuesta.rows;
+        }
+
+        return respuesta;
+
+    } catch (err) {
+        throw new Error(`${err}`);
+    }
+}
 module.exports = {
     LlenarFormulario,
     SolicitudAdopcion,
@@ -2717,5 +2749,6 @@ module.exports = {
     obtenermascotasporusuario,
     MacotasRegistradas,
     MacotasRegistradasespecifica,
-    obtenerPorIdFormularioEspecifico
+    obtenerPorIdFormularioEspecifico,
+    solicitudes
 }
