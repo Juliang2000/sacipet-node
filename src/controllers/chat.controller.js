@@ -112,7 +112,7 @@ const EnviarRespuesta = async (respuesta,id) => {
 const ObtenerPreguntasRespuestas = async (primer_usuario, id_mascota) => {
     try {
         let respuestaS = 
-            await pool.query("SELECT  fecha_envio, mensaje, respuesta FROM public.t_preguntas where primer_usuario = $1 AND id_mascota=$2 ORDER BY fecha_envio,id;", [primer_usuario, id_mascota]);
+            await pool.query("SELECT id, fecha_envio, mensaje, respuesta FROM public.t_preguntas where primer_usuario = $1 AND id_mascota=$2 ORDER BY fecha_envio,id;", [primer_usuario, id_mascota]);
 
 
         if (JSON.stringify(respuestaS.rows) === '[]') {
