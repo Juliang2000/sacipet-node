@@ -2672,7 +2672,7 @@ const solicitudes= async (id) => {
             await pool.query(`SELECT id_mascota, nombre_mascota, edad_mascota, escala_edad, esterilizado, id_raza, id_tamanio, id_color, descripcion_mascota,
                 id_usuario, tipo_tramite, id_codigo, genero_mascota, publicado, telefono1, telefono2, correo, id_formulario, solicitud_adopcion,
                 id, nombre_adoptante, direccion_adoptante, ciudad, localidad, telefono, email, ocupacion, estado_civil, pregunta_1, pregunta_2,
-                pregunta_3, pregunta_4, pregunta_5, pregunta_6, terminos, nombres, telefono_user, correo_user,STRING_AGG(distinct id_foto, ',') 
+                pregunta_3, pregunta_4, pregunta_5, pregunta_6, terminos, nombres, telefono_user, correo_user,STRING_AGG(distinct id_foto, ',') fotos
                     FROM public.v_solicitudes where id=$1
                     
                     GROUP BY id_mascota, nombre_mascota, edad_mascota, escala_edad, esterilizado, id_raza, id_tamanio, id_color, descripcion_mascota,
